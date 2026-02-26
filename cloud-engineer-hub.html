@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud Engineer Hub — GCP · AWS · Azure · Cloudflare</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --white:#fff; --bg:#f7f6f3; --bg2:#eeeae2; --ink:#1a1a1a; --ink2:#3d3d3d;
+  --muted:#888880; --border:#ddd9d0;
+  /* GCP */
+  --gcp:#1a73e8; --gcp-r:#ea4335; --gcp-y:#fbbc04; --gcp-g:#34a853;
+  --gcp-light:#e8f0fe;
+  /* AWS */
+  --aws:#ff9900; --aws-dark:#232f3e; --aws-light:#fff8ee;
+  /* Azure */
+  --az:#0078d4; --az-dark:#003a73; --az-light:#e5f2fb;
+  /* Cloudflare */
+  --cf:#f6821f; --cf-dark:#2c3e50; --cf-light:#fff4ec;
+
+  --success:#34a853; --success-light:#e6f4ea;
+  --warn:#f29900; --warn-light:#fef7e0;
+  --danger:#ea4335; --danger-light:#fce8e6;
+}
+
+:root {
+  --white:#fff;
+  --bg:#f7f6f3;
+  --bg2:#eeeae2;
+  --ink:#1a1a1a;
+  --ink2:#3d3d3d;
+  --muted:#888880;
+  --border:#ddd9d0;
+  --gcp:#1a73e8;
+  --gcp-r:#ea4335;
+  --gcp-y:#fbbc04;
+  --gcp-g:#34a853;
+  --gcp-light:#e8f0fe;
+  --aws:#ff9900;
+  --aws-dark:#232f3e;
+  --aws-light:#fff8ee;
+  --az:#0078d4;
+  --az-dark:#003a73;
+  --az-light:#e5f2fb;
+  --cf:#f6821f;
+  --cf-dark:#2c3e50;
+  --cf-light:#fff4ec;
+  --success:#34a853;
+  --success-light:#e6f4ea;
+  --warn:#f29900;
+  --warn-light:#fef7e0;
+  --danger:#ea4335;
+  --danger-light:#fce8e6;
+}
+body.dark {
+  --bg:#050816;
+  --bg2:#0b1020;
+  --ink:#fdfeff;
+  --ink2:#d0d4e4;
+  --muted:#9ca3af;
+  --border:#1f2937;
+  --gcp-light:rgba(26,115,232,0.12);
+  --aws-light:rgba(255,153,0,0.12);
+  --az-light:rgba(0,120,212,0.16);
+  --cf-light:rgba(246,130,31,0.16);
+  --success-light:rgba(52,168,83,0.18);
+  --warn-light:rgba(242,153,0,0.16);
+  --danger-light:rgba(234,67,53,0.16);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;min-height:100vh;}
+
+/* ═══ NAV ═══ */
+nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:54px;position:sticky;top:0;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.nav-brand{display:flex;align-items:center;gap:8px;font-family:'DM Serif Display',serif;font-size:1.1rem;cursor:pointer;color:var(--ink);}
+.cloud-dots{display:flex;gap:3px;}
+.cloud-dots span{width:7px;height:7px;border-radius:50%;}
+.nav-links{display:flex;gap:3px;}
+.nav-link{padding:5px 13px;border-radius:6px;border:none;background:transparent;font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;}
+.nav-link:hover{background:var(--bg);color:var(--ink);}
+.nav-link.active{background:var(--gcp-light);color:var(--gcp);}
+.nav-link.active.aws-active{background:var(--aws-light);color:var(--aws);}
+.nav-link.active.az-active{background:var(--az-light);color:var(--az);}
+.nav-link.active.cf-active{background:var(--cf-light);color:var(--cf);}
+/* ═══ PAGES ═══ */
+.page{display:none;}
+.page.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.page.active>*{animation:fadeUp .22s ease forwards;}
+
+/* ═══ BUTTONS ═══ */
+.btn{padding:11px 22px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;border:none;transition:all .15s;display:inline-flex;align-items:center;gap:7px;}
+.btn-gcp{background:var(--gcp);color:#fff;box-shadow:0 2px 8px rgba(26,115,232,.25);}
+.btn-gcp:hover{background:#1557b0;transform:translateY(-1px);}
+.btn-aws{background:var(--aws);color:#fff;box-shadow:0 2px 8px rgba(255,153,0,.25);}
+.btn-aws:hover{background:#e68900;transform:translateY(-1px);}
+.btn-az{background:var(--az);color:#fff;box-shadow:0 2px 8px rgba(0,120,212,.25);}
+.btn-az:hover{background:#005a9e;transform:translateY(-1px);}
+.btn-cf{background:var(--cf);color:#fff;box-shadow:0 2px 8px rgba(246,130,31,.25);}
+.btn-cf:hover{background:#d96e12;transform:translateY(-1px);}
+.btn-outline{background:var(--white);color:var(--ink);border:1.5px solid var(--border);}
+.btn-outline:hover{border-color:var(--gcp);color:var(--gcp);}
+
+/* ═══════════════════════════════
+   HOME PAGE
+═══════════════════════════════ */
+.home-hero{background:var(--white);border-bottom:1px solid var(--border);padding:72px 32px 60px;text-align:center;}
+.home-badge{display:inline-flex;align-items:center;gap:6px;background:#f0f0ee;color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:22px;}
+.home-hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,5vw,3.4rem);line-height:1.1;color:var(--ink);margin-bottom:14px;max-width:680px;margin-left:auto;margin-right:auto;}
+.home-hero h1 em{font-style:italic;}
+.home-hero p{color:var(--muted);font-size:.95rem;max-width:520px;margin:0 auto 36px;line-height:1.75;font-weight:300;}
+
+/* Cloud provider selector on home */
+.provider-selector{padding:60px 32px;max-width:1100px;margin:0 auto;}
+.provider-selector h2{font-family:'DM Serif Display',serif;font-size:1.6rem;margin-bottom:8px;}
+.provider-selector p{color:var(--muted);font-size:13px;margin-bottom:32px;}
+.provider-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;}
+.provider-card{background:var(--white);border:2px solid var(--border);border-radius:14px;padding:28px 24px;cursor:pointer;transition:all .18s;text-align:left;position:relative;overflow:hidden;}
+.provider-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;}
+.provider-card.gcp::before{background:linear-gradient(90deg,#4285F4,#EA4335,#FBBC04,#34A853);}
+.provider-card.aws::before{background:linear-gradient(90deg,#ff9900,#232f3e);}
+.provider-card.az::before{background:linear-gradient(90deg,#0078d4,#50e6ff);}
+.provider-card.cf::before{background:linear-gradient(90deg,#f6821f,#faad3f);}
+.provider-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.1);}
+.provider-card.gcp:hover{border-color:var(--gcp);}
+.provider-card.aws:hover{border-color:var(--aws);}
+.provider-card.az:hover{border-color:var(--az);}
+.provider-card.cf:hover{border-color:var(--cf);}
+.pcard-logo{font-size:36px;margin-bottom:14px;display:block;}
+.pcard-name{font-family:'DM Serif Display',serif;font-size:1.3rem;margin-bottom:6px;color:var(--ink);}
+.pcard-tagline{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:16px;}
+.pcard-services{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:16px;}
+.pcard-svc{font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;letter-spacing:.05em;}
+.pcard-svc.gcp{background:var(--gcp-light);color:var(--gcp);}
+.pcard-svc.aws{background:var(--aws-light);color:var(--aws);}
+.pcard-svc.az{background:var(--az-light);color:var(--az);}
+.pcard-svc.cf{background:var(--cf-light);color:var(--cf);}
+.pcard-cta{font-size:12px;font-weight:600;display:flex;align-items:center;gap:5px;}
+.pcard-cta.gcp{color:var(--gcp);}
+.pcard-cta.aws{color:var(--aws);}
+.pcard-cta.az{color:var(--az);}
+.pcard-cta.cf{color:var(--cf);}
+
+/* How-to section */
+.how-section{background:var(--white);border-top:1px solid var(--border);padding:56px 32px;}
+.how-inner{max-width:1100px;margin:0 auto;}
+.section-title-lg{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:28px;}
+.how-steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:24px;}
+.how-step{display:flex;flex-direction:column;gap:9px;}
+.how-num{width:30px;height:30px;background:var(--ink);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;font-family:'DM Mono',monospace;flex-shrink:0;}
+.how-step h4{font-weight:600;font-size:13.5px;}
+.how-step p{font-size:12px;color:var(--muted);line-height:1.65;}
+
+/* Stats */
+.stats-row{display:flex;gap:36px;flex-wrap:wrap;margin-top:44px;padding-top:40px;border-top:1px solid var(--border);}
+.stat{text-align:center;}
+.stat-num{font-family:'DM Serif Display',serif;font-size:2.2rem;display:block;}
+.stat-num.gcp{color:var(--gcp);}
+.stat-num.aws{color:var(--aws);}
+.stat-num.az{color:var(--az);}
+.stat-num.cf{color:var(--cf);}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+
+/* ═══════════════════════════════
+   REFERENCE PAGE (shared)
+═══════════════════════════════ */
+.ref-header{background:var(--white);border-bottom:1px solid var(--border);padding:36px 40px 28px;}
+.ref-header-top{display:flex;align-items:center;gap:14px;margin-bottom:6px;}
+.ref-header h2{font-family:'DM Serif Display',serif;font-size:1.85rem;}
+.ref-header p{color:var(--muted);font-size:13.5px;}
+.ref-content{max-width:1100px;margin:0 auto;padding:36px 40px;}
+.ref-section{margin-bottom:44px;}
+.ref-section-title{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;padding-bottom:9px;border-bottom:2px solid var(--border);display:flex;align-items:center;gap:8px;}
+.ref-section-title::before{content:'';width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+.ref-section-title.blue::before{background:#1a73e8;}
+.ref-section-title.green::before{background:#34a853;}
+.ref-section-title.red::before{background:#ea4335;}
+.ref-section-title.yellow::before{background:#fbbc04;}
+.ref-section-title.orange::before{background:#ff6b35;}
+.ref-section-title.purple::before{background:#a855f7;}
+.ref-section-title.aws::before{background:var(--aws);}
+.ref-section-title.az::before{background:var(--az);}
+.ref-section-title.cf::before{background:var(--cf);}
+
+/* Flow steps */
+.flow-row{display:flex;flex-wrap:wrap;gap:2px;margin-bottom:18px;}
+.fs{flex:1;min-width:110px;background:var(--bg);border:1px solid var(--border);padding:10px 12px;position:relative;}
+.fs:first-child{border-radius:8px 0 0 8px;}
+.fs:last-child{border-radius:0 8px 8px 0;}
+.fs::after{content:'›';position:absolute;right:-9px;top:50%;transform:translateY(-50%);font-size:17px;color:var(--border);z-index:2;pointer-events:none;}
+.fs:last-child::after{display:none;}
+.fs-num{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:3px;}
+.fs-name{font-weight:600;font-size:11.5px;color:var(--ink);margin-bottom:3px;}
+.fs-cmd{font-family:'DM Mono',monospace;font-size:10px;color:var(--gcp);margin-bottom:3px;}
+.fs-why{font-size:10px;color:var(--muted);}
+.fs.c1{border-top:2px solid var(--gcp-y);}
+.fs.c2{border-top:2px solid var(--gcp);}
+.fs.c3{border-top:2px solid #ff6b35;}
+.fs.c4{border-top:2px solid #a855f7;}
+.fs.c5{border-top:2px solid var(--gcp-g);}
+.fs.c6{border-top:2px solid var(--gcp-r);}
+/* AWS flow colors */
+.fs.aws1{border-top:2px solid var(--aws);}
+.fs.aws2{border-top:2px solid var(--aws-dark);}
+/* Azure flow colors */
+.fs.az1{border-top:2px solid var(--az);}
+.fs.az2{border-top:2px solid #50e6ff;}
+
+/* CMD table */
+.cmd-table{width:100%;border-collapse:collapse;margin-bottom:18px;background:var(--white);border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:12px;}
+.cmd-table thead tr{background:var(--bg2);}
+.cmd-table th{text-align:left;padding:7px 13px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+.cmd-table td{padding:7px 13px;border-top:1px solid var(--border);vertical-align:top;}
+.cmd-table td:first-child{font-family:'DM Mono',monospace;font-size:10.5px;color:var(--gcp);white-space:nowrap;width:90px;}
+.cmd-table td:nth-child(2){font-family:'DM Mono',monospace;font-size:10.5px;color:var(--gcp-g);word-break:break-all;}
+.cmd-table td:last-child{font-size:11px;color:var(--muted);}
+.cmd-table tr:hover td{background:var(--bg);}
+.cmd-table.aws td:first-child{color:var(--aws);}
+.cmd-table.aws td:nth-child(2){color:#c66;}
+.cmd-table.az td:first-child{color:var(--az);}
+.cmd-table.az td:nth-child(2){color:#2ea8e0;}
+.cmd-table.cf td:first-child{color:var(--cf);}
+.cmd-table.cf td:nth-child(2){color:#c07a30;}
+
+/* Service cards */
+.svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;}
+.svc-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;}
+.svc-tag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:4px;margin-bottom:7px;}
+.svc-tag.blue{background:var(--gcp-light);color:var(--gcp);}
+.svc-tag.green{background:var(--success-light);color:var(--success);}
+.svc-tag.red{background:var(--danger-light);color:var(--danger);}
+.svc-tag.yellow{background:var(--warn-light);color:var(--warn);}
+.svc-tag.purple{background:#f3e8ff;color:#a855f7;}
+.svc-tag.aws{background:var(--aws-light);color:var(--aws);}
+.svc-tag.az{background:var(--az-light);color:var(--az);}
+.svc-tag.cf{background:var(--cf-light);color:var(--cf);}
+.svc-tag.dark{background:#f0f0ee;color:#555;}
+.svc-card h4{font-size:12.5px;font-weight:600;margin-bottom:7px;color:var(--ink);}
+.svc-card ul{list-style:none;padding:0;}
+.svc-card li{font-size:11px;color:var(--ink2);padding:3px 0;border-bottom:1px solid var(--border);display:flex;gap:5px;}
+.svc-card li:last-child{border-bottom:none;}
+.svc-card li b{color:var(--muted);font-weight:500;flex-shrink:0;}
+
+/* Trouble grid */
+.trouble-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px;}
+.trouble-card{border-radius:10px;padding:14px;border:1px solid var(--border);}
+.trouble-card.red{background:#fff5f5;border-left:4px solid var(--gcp-r);}
+.trouble-card.yellow{background:#fffdf0;border-left:4px solid var(--gcp-y);}
+.trouble-card.green{background:#f0fff4;border-left:4px solid var(--gcp-g);}
+.trouble-card h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;color:var(--ink);}
+.trouble-row{display:flex;gap:7px;font-size:10.5px;padding:3.5px 0;border-bottom:1px solid rgba(0,0,0,.05);}
+.trouble-row:last-child{border-bottom:none;}
+.trouble-row .prob{flex:1;color:var(--ink2);}
+.trouble-row .fix{flex:1;color:var(--gcp-g);font-family:'DM Mono',monospace;font-size:10px;text-align:right;}
+
+/* ═══════════════════════════════
+   CHECKLIST PAGE
+═══════════════════════════════ */
+.checklist-header{background:var(--white);border-bottom:1px solid var(--border);padding:36px 40px 28px;}
+.checklist-header h2{font-family:'DM Serif Display',serif;font-size:1.85rem;margin-bottom:5px;}
+.checklist-header p{color:var(--muted);font-size:13.5px;}
+.checklist-inner{max-width:880px;margin:0 auto;padding:36px 40px;}
+
+/* Provider tabs in checklist */
+.cloud-tabs{display:flex;gap:6px;margin-bottom:28px;flex-wrap:wrap;}
+.cloud-tab{padding:7px 18px;border-radius:8px;border:2px solid var(--border);background:var(--white);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:7px;}
+.cloud-tab:hover{border-color:var(--muted);}
+.cloud-tab.active.gcp{border-color:var(--gcp);background:var(--gcp-light);color:var(--gcp);}
+.cloud-tab.active.aws{border-color:var(--aws);background:var(--aws-light);color:var(--aws);}
+.cloud-tab.active.az{border-color:var(--az);background:var(--az-light);color:var(--az);}
+.cloud-tab.active.cf{border-color:var(--cf);background:var(--cf-light);color:var(--cf);}
+
+/* Selector section */
+.selector-section{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:26px;margin-bottom:24px;}
+.selector-section h3{font-family:'DM Serif Display',serif;font-size:1.25rem;margin-bottom:5px;}
+.selector-section>p{font-size:13px;color:var(--muted);margin-bottom:18px;}
+.service-selector-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:9px;margin-bottom:20px;}
+.service-option{border:2px solid var(--border);border-radius:10px;padding:13px 11px;text-align:center;cursor:pointer;transition:all .15s;background:var(--bg);position:relative;}
+.service-option:hover{border-color:#aaa;background:#f0ede8;}
+.service-option.selected.gcp{border-color:var(--gcp);background:var(--gcp-light);}
+.service-option.selected.aws{border-color:var(--aws);background:var(--aws-light);}
+.service-option.selected.az{border-color:var(--az);background:var(--az-light);}
+.service-option.selected.cf{border-color:var(--cf);background:var(--cf-light);}
+.check-badge{position:absolute;top:5px;right:5px;width:15px;height:15px;border-radius:50%;font-size:9px;display:none;align-items:center;justify-content:center;color:#fff;font-weight:700;}
+.service-option.selected .check-badge{display:flex;}
+.service-option.selected.gcp .check-badge{background:var(--gcp);}
+.service-option.selected.aws .check-badge{background:var(--aws);}
+.service-option.selected.az .check-badge{background:var(--az);}
+.service-option.selected.cf .check-badge{background:var(--cf);}
+.svc-icon{font-size:22px;margin-bottom:5px;}
+.svc-name{font-weight:600;font-size:11.5px;color:var(--ink);}
+.svc-desc{font-size:10px;color:var(--muted);margin-top:2px;}
+
+/* Extra chips */
+.extra-services{border-top:1px solid var(--border);padding-top:14px;margin-top:4px;}
+.extra-services h4{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:11px;}
+.extra-grid{display:flex;flex-wrap:wrap;gap:7px;}
+.extra-chip{display:flex;align-items:center;gap:5px;padding:5px 11px;border:1.5px solid var(--border);border-radius:20px;background:var(--bg);font-size:12px;font-weight:500;cursor:pointer;transition:all .14s;color:var(--ink2);}
+.extra-chip:hover{border-color:#aaa;}
+.extra-chip.selected.gcp{border-color:var(--gcp);background:var(--gcp-light);color:var(--gcp);}
+.extra-chip.selected.aws{border-color:var(--aws);background:var(--aws-light);color:var(--aws);}
+.extra-chip.selected.az{border-color:var(--az);background:var(--az-light);color:var(--az);}
+.extra-chip.selected.cf{border-color:var(--cf);background:var(--cf-light);color:var(--cf);}
+.chip-icon{font-size:13px;}
+
+.generate-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:11px;margin-top:18px;}
+.selection-summary{font-size:12px;color:var(--muted);}
+.selection-summary span{font-weight:600;}
+.selection-summary span.gcp{color:var(--gcp);}
+.selection-summary span.aws{color:var(--aws);}
+.selection-summary span.az{color:var(--az);}
+.selection-summary span.cf{color:var(--cf);}
+
+/* Checklist blocks */
+.checklist-area{display:none;}
+.checklist-area.visible{display:block;}
+.checklist-block{background:var(--white);border:1px solid var(--border);border-radius:12px;margin-bottom:18px;overflow:hidden;animation:fadeUp .2s ease forwards;}
+.cl-header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);background:var(--bg);}
+.cl-header-left{display:flex;align-items:center;gap:9px;}
+.cl-icon{font-size:17px;}
+.cl-title{font-weight:700;font-size:13.5px;}
+.cl-subtitle{font-size:10.5px;color:var(--muted);}
+.cl-progress-wrap{display:flex;align-items:center;gap:8px;}
+.cl-progress-bar{width:72px;height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+.cl-progress-fill{height:100%;background:var(--gcp-g);border-radius:3px;transition:width .3s;width:0%;}
+.cl-progress-text{font-family:'DM Mono',monospace;font-size:10.5px;color:var(--muted);min-width:32px;text-align:right;}
+.cl-items{padding:6px 0;}
+.cl-item{display:flex;align-items:flex-start;gap:11px;padding:9px 18px;border-bottom:1px solid #f0ede8;cursor:pointer;transition:background .1s;}
+.cl-item:last-child{border-bottom:none;}
+.cl-item:hover{background:#f9f8f5;}
+.cl-item.done{opacity:.5;}
+.cl-item.done .cl-item-name{text-decoration:line-through;}
+.cl-checkbox{width:17px;height:17px;border:2px solid var(--border);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:1px;transition:all .14s;}
+.cl-item.done .cl-checkbox{background:var(--gcp-g);border-color:var(--gcp-g);}
+.cl-checkbox::after{content:'✓';color:#fff;font-size:10px;font-weight:700;display:none;}
+.cl-item.done .cl-checkbox::after{display:block;}
+.cl-item-body{flex:1;}
+.cl-item-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px;}
+.cl-item-cmd{font-family:'DM Mono',monospace;font-size:10px;color:var(--gcp);background:var(--bg);padding:2px 6px;border-radius:3px;display:inline-block;margin-bottom:3px;word-break:break-all;}
+.cl-item-cmd.aws{color:var(--aws);}
+.cl-item-cmd.az{color:var(--az);}
+.cl-item-cmd.cf{color:var(--cf);}
+.cl-item-why{font-size:11px;color:var(--muted);}
+.cl-item-tag{font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;flex-shrink:0;align-self:flex-start;margin-top:2px;}
+.cl-item-tag.req{background:var(--danger-light);color:var(--danger);}
+.cl-item-tag.opt{background:var(--warn-light);color:var(--warn);}
+
+/* Overall progress */
+.overall-progress{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;gap:18px;}
+.overall-pct{font-family:'DM Serif Display',serif;font-size:2.4rem;min-width:68px;}
+.overall-pct.gcp{color:var(--gcp);}
+.overall-pct.aws{color:var(--aws);}
+.overall-pct.az{color:var(--az);}
+.overall-pct.cf{color:var(--cf);}
+.overall-bar-wrap{flex:1;}
+.overall-bar-label{font-size:11.5px;color:var(--muted);margin-bottom:5px;display:flex;justify-content:space-between;}
+.overall-bar{height:7px;background:var(--border);border-radius:4px;overflow:hidden;}
+.overall-bar-fill{height:100%;border-radius:4px;transition:width .4s;width:0%;}
+.overall-bar-fill.gcp{background:linear-gradient(90deg,var(--gcp),var(--gcp-g));}
+.overall-bar-fill.aws{background:linear-gradient(90deg,var(--aws),#ffcc66);}
+.overall-bar-fill.az{background:linear-gradient(90deg,var(--az),#50e6ff);}
+.overall-bar-fill.cf{background:linear-gradient(90deg,var(--cf),#faad3f);}
+.reset-btn{padding:7px 14px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;}
+.reset-btn:hover{border-color:var(--danger);color:var(--danger);}
+
+/* Section label in checklist block header */
+.provider-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:.1em;}
+.provider-badge.gcp{background:var(--gcp-light);color:var(--gcp);}
+.provider-badge.aws{background:var(--aws-light);color:var(--aws);}
+.provider-badge.az{background:var(--az-light);color:var(--az);}
+.provider-badge.cf{background:var(--cf-light);color:var(--cf);}
+
+/* Category divider in extra chips */
+.chip-category{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);width:100%;margin-top:8px;margin-bottom:2px;}
+
+/* Responsive */
+@media(max-width:600px){
+  nav{padding:0 14px;}
+  .home-hero,.provider-selector,.how-section{padding-left:16px;padding-right:16px;}
+  .ref-content,.checklist-inner,.ref-header,.checklist-header{padding:20px 16px;}
+  .service-selector-grid{grid-template-columns:repeat(2,1fr);}
+  .flow-row{flex-direction:column;}
+  .fs::after{display:none;}
+  .cloud-tabs{gap:4px;}
+}
+</style>
+</head>
+<body>
+<!-- NAV -->
+<nav>
+  <div class="nav-brand" onclick="showPage('home')">
+    <div class="cloud-dots">
+      <span style="background:#4285F4"></span>
+      <span style="background:#EA4335"></span>
+      <span style="background:#ff9900"></span>
+      <span style="background:#0078d4"></span>
+      <span style="background:#f6821f"></span>
+    </div>
+    Cloud Engineer Hub
+  </div>
+  <div class="nav-links">
+    <button class="nav-link active" id="nav-home" onclick="showPage('home')">🏠 Home</button>
+    <button class="nav-link" id="nav-ref" onclick="showPage('ref')">📖 Reference</button>
+    <button class="nav-link" id="nav-checklist" onclick="showPage('checklist')">✅ Checklist</button>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════
+     HOME PAGE
+════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <div class="home-hero">
+    <div class="home-badge">☁ Multi-Cloud Engineer Prep Tool</div>
+    <h1>Master Cloud Deployments<br><em>Across Every Platform</em></h1>
+    <p>A structured reference, interactive checklist and troubleshooting guide for GCP, AWS, Azure and Cloudflare — built for cloud engineers preparing for real-world deployments.</p>
+  </div>
+
+  <div class="provider-selector">
+    <h2>Choose your cloud platform</h2>
+    <p>Each platform has its own complete deployment reference, service library, and step-by-step checklist.</p>
+    <div class="provider-grid">
+
+      <div class="provider-card gcp" onclick="openCloud('gcp')">
+        <span class="pcard-logo">☁️</span>
+        <div class="pcard-name">Google Cloud (GCP)</div>
+        <div class="pcard-tagline">Google's cloud platform. Best-in-class Kubernetes, serverless, and data tools.</div>
+        <div class="pcard-services">
+          <span class="pcard-svc gcp">GCE</span><span class="pcard-svc gcp">Cloud Run</span><span class="pcard-svc gcp">GKE</span><span class="pcard-svc gcp">Cloud Functions</span><span class="pcard-svc gcp">App Engine</span><span class="pcard-svc gcp">VPC</span><span class="pcard-svc gcp">Cloud SQL</span><span class="pcard-svc gcp">IAM</span>
+        </div>
+        <div class="pcard-cta gcp">Open GCP Guide →</div>
+      </div>
+
+      <div class="provider-card aws" onclick="openCloud('aws')">
+        <span class="pcard-logo">🟠</span>
+        <div class="pcard-name">Amazon Web Services</div>
+        <div class="pcard-tagline">World's largest cloud. Broadest service portfolio. Industry standard for enterprise.</div>
+        <div class="pcard-services">
+          <span class="pcard-svc aws">EC2</span><span class="pcard-svc aws">Lambda</span><span class="pcard-svc aws">ECS</span><span class="pcard-svc aws">EKS</span><span class="pcard-svc aws">S3</span><span class="pcard-svc aws">RDS</span><span class="pcard-svc aws">VPC</span><span class="pcard-svc aws">IAM</span>
+        </div>
+        <div class="pcard-cta aws">Open AWS Guide →</div>
+      </div>
+
+      <div class="provider-card az" onclick="openCloud('az')">
+        <span class="pcard-logo">🔷</span>
+        <div class="pcard-name">Microsoft Azure</div>
+        <div class="pcard-tagline">Microsoft's cloud. Dominant in enterprise, .NET ecosystems, and hybrid deployments.</div>
+        <div class="pcard-services">
+          <span class="pcard-svc az">VMs</span><span class="pcard-svc az">App Service</span><span class="pcard-svc az">AKS</span><span class="pcard-svc az">Functions</span><span class="pcard-svc az">Blob</span><span class="pcard-svc az">Azure SQL</span><span class="pcard-svc az">VNet</span><span class="pcard-svc az">DevOps</span>
+        </div>
+        <div class="pcard-cta az">Open Azure Guide →</div>
+      </div>
+
+      <div class="provider-card cf" onclick="openCloud('cf')">
+        <span class="pcard-logo">🟡</span>
+        <div class="pcard-name">Cloudflare</div>
+        <div class="pcard-tagline">Edge network, CDN, DNS, WAF. Used alongside all clouds for performance and security.</div>
+        <div class="pcard-services">
+          <span class="pcard-svc cf">CDN</span><span class="pcard-svc cf">DNS</span><span class="pcard-svc cf">Workers</span><span class="pcard-svc cf">WAF</span><span class="pcard-svc cf">R2</span><span class="pcard-svc cf">Load Balancer</span><span class="pcard-svc cf">Tunnel</span>
+        </div>
+        <div class="pcard-cta cf">Open Cloudflare Guide →</div>
+      </div>
+
+    </div>
+
+    <div class="stats-row">
+      <div class="stat"><span class="stat-num gcp">4</span><span class="stat-label">Cloud Platforms</span></div>
+      <div class="stat"><span class="stat-num aws">80+</span><span class="stat-label">Services Covered</span></div>
+      <div class="stat"><span class="stat-num az">200+</span><span class="stat-label">CLI Commands</span></div>
+      <div class="stat"><span class="stat-num cf">40+</span><span class="stat-label">Deployment Flows</span></div>
+    </div>
+  </div>
+
+  <div class="how-section">
+    <div class="how-inner">
+      <div class="section-title-lg">How to use this tool</div>
+      <div class="how-steps">
+        <div class="how-step"><div class="how-num">1</div><h4>Pick a Cloud</h4><p>Click any cloud provider card above or use the tabs in the Checklist page to switch between GCP, AWS, Azure and Cloudflare.</p></div>
+        <div class="how-step"><div class="how-num">2</div><h4>Study the Reference</h4><p>Open the Reference tab for deployment flows, key commands, and service cards for every service on that platform.</p></div>
+        <div class="how-step"><div class="how-num">3</div><h4>Select Services</h4><p>In the Checklist tab, pick your primary deployment target then add-on services like databases, CDN, IAM and networking.</p></div>
+        <div class="how-step"><div class="how-num">4</div><h4>Generate Checklist</h4><p>Click Generate to get a tailored, step-by-step deployment checklist with exact CLI commands for every step.</p></div>
+        <div class="how-step"><div class="how-num">5</div><h4>Deploy & Tick Off</h4><p>Execute each step in your terminal and click to check it off. Watch your progress bar fill up to 100%.</p></div>
+        <div class="how-step"><div class="how-num">6</div><h4>Troubleshoot</h4><p>If something breaks, use the troubleshoot section in Reference. Follow the systematic 7-step debug flow for any cloud issue.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════
+     REFERENCE PAGE
+════════════════════════════════════ -->
+<div class="page" id="page-ref">
+
+  <div class="ref-header">
+    <div class="ref-header-top">
+      <h2 id="ref-title">☁️ GCP Reference Guide</h2>
+    </div>
+    <p id="ref-subtitle">Deployment flows, commands, services and troubleshooting for Google Cloud Platform.</p>
+    <div class="cloud-tabs" style="margin-top:16px;margin-bottom:0;">
+      <button class="cloud-tab active gcp" id="reftab-gcp" onclick="switchRefCloud('gcp')">☁️ GCP</button>
+      <button class="cloud-tab aws" id="reftab-aws" onclick="switchRefCloud('aws')">🟠 AWS</button>
+      <button class="cloud-tab az" id="reftab-az" onclick="switchRefCloud('az')">🔷 Azure</button>
+      <button class="cloud-tab cf" id="reftab-cf" onclick="switchRefCloud('cf')">🟡 Cloudflare</button>
+    </div>
+  </div>
+
+  <!-- GCP REF -->
+  <div id="ref-gcp" class="ref-content">
+
+    <div class="ref-section">
+      <div class="ref-section-title blue">① Universal Pre-Flight — Every Deployment Starts Here</div>
+      <table class="cmd-table"><thead><tr><th>STEP</th><th>COMMAND</th><th>PURPOSE</th></tr></thead><tbody>
+        <tr><td>INSTALL</td><td>curl https://sdk.cloud.google.com | bash</td><td>Install gcloud CLI</td></tr>
+        <tr><td>AUTH</td><td>gcloud auth login</td><td>Authenticate your Google account</td></tr>
+        <tr><td>PROJECT</td><td>gcloud config set project PROJECT_ID</td><td>Set active GCP project</td></tr>
+        <tr><td>REGION</td><td>gcloud config set compute/region us-central1</td><td>Set default region</td></tr>
+        <tr><td>ENABLE APIs</td><td>gcloud services enable compute.googleapis.com container.googleapis.com run.googleapis.com</td><td>Enable required APIs</td></tr>
+        <tr><td>IAM CHECK</td><td>gcloud projects get-iam-policy PROJECT_ID</td><td>Verify roles & permissions</td></tr>
+        <tr><td>APP-DEFAULT</td><td>gcloud auth application-default login</td><td>Auth for SDKs & local code</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title yellow">② Path A — GCE VM Instance</div>
+      <div class="flow-row">
+        <div class="fs c1"><div class="fs-num">01</div><div class="fs-name">Prepare Code</div><div class="fs-cmd">git / zip</div><div class="fs-why">App ready locally</div></div>
+        <div class="fs c2"><div class="fs-num">02</div><div class="fs-name">Create VM</div><div class="fs-cmd">instances create</div><div class="fs-why">Provision VM</div></div>
+        <div class="fs c3"><div class="fs-num">03</div><div class="fs-name">Firewall</div><div class="fs-cmd">firewall-rules create</div><div class="fs-why">Open ports</div></div>
+        <div class="fs c4"><div class="fs-num">04</div><div class="fs-name">SSH In</div><div class="fs-cmd">gcloud compute ssh</div><div class="fs-why">Connect to VM</div></div>
+        <div class="fs c5"><div class="fs-num">05</div><div class="fs-name">Copy + Install</div><div class="fs-cmd">scp + apt install</div><div class="fs-why">Transfer & setup</div></div>
+        <div class="fs c6"><div class="fs-num">06</div><div class="fs-name">Run + Verify</div><div class="fs-cmd">systemctl + curl</div><div class="fs-why">Start as service</div></div>
+      </div>
+      <table class="cmd-table"><thead><tr><th>LABEL</th><th>COMMAND</th><th>PURPOSE</th></tr></thead><tbody>
+        <tr><td>CREATE</td><td>gcloud compute instances create my-vm --machine-type=e2-medium --image-family=debian-11 --image-project=debian-cloud --zone=us-central1-a</td><td>Provision VM</td></tr>
+        <tr><td>SPOT VM</td><td>--provisioning-model=SPOT</td><td>60–91% cheaper, preemptible</td></tr>
+        <tr><td>SSH</td><td>gcloud compute ssh my-vm --zone=us-central1-a</td><td>Connect to VM</td></tr>
+        <tr><td>SCP</td><td>gcloud compute scp ./app.tar.gz my-vm:~/ --zone=us-central1-a</td><td>Upload files to VM</td></tr>
+        <tr><td>FIREWALL</td><td>gcloud compute firewall-rules create allow-http --allow tcp:80 --target-tags=http-server</td><td>Open port 80</td></tr>
+        <tr><td>STARTUP</td><td>--metadata-from-file startup-script=startup.sh</td><td>Auto-run on boot</td></tr>
+        <tr><td>STATIC IP</td><td>gcloud compute addresses create my-ip --region=us-central1</td><td>Reserve external IP</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title blue">③ Path B — Cloud Run (Serverless Container)</div>
+      <div class="flow-row">
+        <div class="fs c1"><div class="fs-num">01</div><div class="fs-name">Dockerfile</div><div class="fs-cmd">Write Dockerfile</div><div class="fs-why">Define container</div></div>
+        <div class="fs c2"><div class="fs-num">02</div><div class="fs-name">Build & Push</div><div class="fs-cmd">gcloud builds submit</div><div class="fs-why">Build in cloud</div></div>
+        <div class="fs c5"><div class="fs-num">03</div><div class="fs-name">Deploy</div><div class="fs-cmd">gcloud run deploy</div><div class="fs-why">Serverless container</div></div>
+        <div class="fs c6"><div class="fs-num">04</div><div class="fs-name">Verify</div><div class="fs-cmd">curl SERVICE_URL</div><div class="fs-why">Test endpoint</div></div>
+      </div>
+      <table class="cmd-table"><thead><tr><th>LABEL</th><th>COMMAND</th><th>PURPOSE</th></tr></thead><tbody>
+        <tr><td>BUILD</td><td>gcloud builds submit --tag gcr.io/PROJECT_ID/myapp:v1</td><td>Build & push to registry</td></tr>
+        <tr><td>DEPLOY</td><td>gcloud run deploy myapp --image gcr.io/PROJECT_ID/myapp:v1 --platform managed --region us-central1 --allow-unauthenticated</td><td>Deploy serverless container</td></tr>
+        <tr><td>ENV VARS</td><td>--set-env-vars KEY=VALUE</td><td>Inject config at deploy</td></tr>
+        <tr><td>SECRETS</td><td>--set-secrets DB_PASS=my-secret:latest</td><td>Mount Secret Manager secret</td></tr>
+        <tr><td>MIN INST</td><td>--min-instances=1</td><td>Avoid cold starts</td></tr>
+        <tr><td>VPC CONN</td><td>--vpc-connector=my-connector</td><td>Access private VPC resources</td></tr>
+        <tr><td>LOGS</td><td>gcloud run services logs read myapp --region us-central1</td><td>View runtime logs</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title green">④ Path C — GKE Kubernetes (Multi-Container)</div>
+      <div class="flow-row">
+        <div class="fs c1"><div class="fs-num">01</div><div class="fs-name">Dockerfiles</div><div class="fs-cmd">1 per service</div><div class="fs-why">Each svc = container</div></div>
+        <div class="fs c2"><div class="fs-num">02</div><div class="fs-name">Build & Push All</div><div class="fs-cmd">docker build+push</div><div class="fs-why">Images to registry</div></div>
+        <div class="fs c3"><div class="fs-num">03</div><div class="fs-name">Create Cluster</div><div class="fs-cmd">clusters create</div><div class="fs-why">K8s on GCP</div></div>
+        <div class="fs c4"><div class="fs-num">04</div><div class="fs-name">Get Credentials</div><div class="fs-cmd">get-credentials</div><div class="fs-why">Configure kubectl</div></div>
+        <div class="fs c5"><div class="fs-num">05</div><div class="fs-name">Apply Manifests</div><div class="fs-cmd">kubectl apply -f</div><div class="fs-why">Deploy all resources</div></div>
+        <div class="fs c6"><div class="fs-num">06</div><div class="fs-name">Verify</div><div class="fs-cmd">kubectl get pods</div><div class="fs-why">All pods Running?</div></div>
+      </div>
+      <table class="cmd-table"><thead><tr><th>LABEL</th><th>COMMAND</th><th>PURPOSE</th></tr></thead><tbody>
+        <tr><td>CLUSTER</td><td>gcloud container clusters create my-cluster --num-nodes=3 --zone=us-central1-a</td><td>Provision K8s cluster</td></tr>
+        <tr><td>KUBECONFIG</td><td>gcloud container clusters get-credentials my-cluster --zone=us-central1-a</td><td>Link kubectl to cluster</td></tr>
+        <tr><td>DEPLOY</td><td>kubectl apply -f deployment.yaml</td><td>Create Deployment + Pods</td></tr>
+        <tr><td>EXPOSE</td><td>kubectl expose deployment myapp --type=LoadBalancer --port=80</td><td>External load balancer</td></tr>
+        <tr><td>SCALE</td><td>kubectl scale deployment myapp --replicas=5</td><td>Scale pods</td></tr>
+        <tr><td>UPDATE</td><td>kubectl set image deployment/myapp myapp=gcr.io/PROJECT/myapp:v2</td><td>Rolling zero-downtime update</td></tr>
+        <tr><td>LOGS</td><td>kubectl logs pod/POD_NAME -c CONTAINER</td><td>View container logs</td></tr>
+        <tr><td>EXEC</td><td>kubectl exec -it POD_NAME -- /bin/sh</td><td>Debug inside container</td></tr>
+        <tr><td>DESCRIBE</td><td>kubectl describe pod POD_NAME</td><td>Pod events & status</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title purple">⑤ GCP Additional Services</div>
+      <div class="svc-grid">
+        <div class="svc-card"><span class="svc-tag blue">Artifact Registry</span><h4>Container Registry</h4><ul><li><b>Purpose</b> Private Docker image storage on GCP</li><li><b>Push</b> docker push REGION-docker.pkg.dev/PROJECT/REPO/IMG</li><li><b>Auth</b> gcloud auth configure-docker REGION-docker.pkg.dev</li></ul></div>
+        <div class="svc-card"><span class="svc-tag green">Cloud Build</span><h4>CI/CD</h4><ul><li><b>Purpose</b> Auto build/test/push on git push</li><li><b>Config</b> cloudbuild.yaml in repo root</li><li><b>Trigger</b> Push to branch → build → deploy</li></ul></div>
+        <div class="svc-card"><span class="svc-tag red">Cloud SQL</span><h4>Managed Database</h4><ul><li><b>Purpose</b> Managed MySQL/PostgreSQL/SQLServer</li><li><b>Connect</b> Cloud SQL Auth Proxy or private IP</li><li><b>Create</b> gcloud sql instances create</li></ul></div>
+        <div class="svc-card"><span class="svc-tag yellow">Secret Manager</span><h4>Secrets</h4><ul><li><b>Purpose</b> Store API keys & passwords securely</li><li><b>Create</b> gcloud secrets create my-secret</li><li><b>Rule</b> Never hardcode secrets in code/yaml</li></ul></div>
+        <div class="svc-card"><span class="svc-tag purple">VPC Connector</span><h4>Serverless → VPC Bridge</h4><ul><li><b>Purpose</b> Cloud Run/Functions → private VPC</li><li><b>Create</b> gcloud compute networks vpc-access connectors create</li><li><b>Range</b> Pick unused /28 IP range</li></ul></div>
+        <div class="svc-card"><span class="svc-tag blue">Cloud NAT</span><h4>Outbound for Private VMs</h4><ul><li><b>Purpose</b> Private VMs reach internet without public IP</li><li><b>Requires</b> Cloud Router first</li><li><b>Create</b> gcloud compute routers nats create</li></ul></div>
+        <div class="svc-card"><span class="svc-tag red">Cloud Armor</span><h4>WAF / DDoS</h4><ul><li><b>Purpose</b> Block attacks, rate-limit, IP rules</li><li><b>Policy</b> gcloud compute security-policies create</li><li><b>OWASP</b> evaluatePreconfiguredExpr("sqli-v33-stable")</li></ul></div>
+        <div class="svc-card"><span class="svc-tag green">Cloud CDN</span><h4>Content Delivery</h4><ul><li><b>Purpose</b> Cache at Google edge PoPs globally</li><li><b>Enable</b> gcloud compute backend-services update --enable-cdn</li><li><b>Invalidate</b> gcloud compute url-maps invalidate-cdn-cache</li></ul></div>
+        <div class="svc-card"><span class="svc-tag yellow">Cloud DNS</span><h4>Managed DNS</h4><ul><li><b>Purpose</b> Host DNS zones on GCP</li><li><b>Zone</b> gcloud dns managed-zones create</li><li><b>A Record</b> gcloud dns record-sets create</li></ul></div>
+        <div class="svc-card"><span class="svc-tag purple">Pub/Sub</span><h4>Async Messaging</h4><ul><li><b>Purpose</b> Decouple services asynchronously</li><li><b>Topic</b> gcloud pubsub topics create my-topic</li><li><b>Sub</b> gcloud pubsub subscriptions create</li></ul></div>
+        <div class="svc-card"><span class="svc-tag blue">Cloud Monitoring</span><h4>Observability</h4><ul><li><b>Logs</b> gcloud logging read "filter" --limit=50</li><li><b>Metrics</b> CPU, memory, latency dashboards</li><li><b>Alerts</b> Alert policies on threshold breach</li></ul></div>
+        <div class="svc-card"><span class="svc-tag red">IAM & Admin</span><h4>Permissions</h4><ul><li><b>SA</b> gcloud iam service-accounts create</li><li><b>Bind</b> gcloud projects add-iam-policy-binding</li><li><b>Rule</b> Least privilege — never blanket Editor</li></ul></div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title red">⑥ Troubleshooting — GCP Common Issues</div>
+      <div class="trouble-grid">
+        <div class="trouble-card red"><h4>🔴 IAM / Permission</h4>
+          <div class="trouble-row"><span class="prob">403 Permission Denied</span><span class="fix">Check roles assigned to SA</span></div>
+          <div class="trouble-row"><span class="prob">API not enabled</span><span class="fix">gcloud services enable SERVICE</span></div>
+          <div class="trouble-row"><span class="prob">Auth expired</span><span class="fix">gcloud auth login</span></div>
+          <div class="trouble-row"><span class="prob">SA missing role</span><span class="fix">add-iam-policy-binding</span></div>
+        </div>
+        <div class="trouble-card red"><h4>🔴 Container / K8s</h4>
+          <div class="trouble-row"><span class="prob">ImagePullBackOff</span><span class="fix">Check image path + registry auth</span></div>
+          <div class="trouble-row"><span class="prob">CrashLoopBackOff</span><span class="fix">kubectl logs POD — app crash</span></div>
+          <div class="trouble-row"><span class="prob">Pods Pending</span><span class="fix">Scale nodes or check resource requests</span></div>
+          <div class="trouble-row"><span class="prob">OOMKilled</span><span class="fix">Increase memory limits in spec</span></div>
+        </div>
+        <div class="trouble-card yellow"><h4>🟡 Networking</h4>
+          <div class="trouble-row"><span class="prob">Can't reach VM on port</span><span class="fix">Add firewall rule for that port</span></div>
+          <div class="trouble-row"><span class="prob">Cloud Run 502/503</span><span class="fix">App must listen on PORT env var</span></div>
+          <div class="trouble-row"><span class="prob">LB health check fails</span><span class="fix">Check /healthz path + port</span></div>
+          <div class="trouble-row"><span class="prob">VPC Connector not connecting</span><span class="fix">Connector must be READY state</span></div>
+        </div>
+        <div class="trouble-card green"><h4>🟢 7-Step Debug Flow</h4>
+          <div class="trouble-row"><span class="prob">1. Logs</span><span class="fix">Cloud Logging / kubectl logs</span></div>
+          <div class="trouble-row"><span class="prob">2. Status</span><span class="fix">kubectl get pods / gcloud list</span></div>
+          <div class="trouble-row"><span class="prob">3. Networking</span><span class="fix">Firewall / VPC / ports</span></div>
+          <div class="trouble-row"><span class="prob">4. IAM</span><span class="fix">Roles / SA / APIs enabled</span></div>
+          <div class="trouble-row"><span class="prob">5. Config</span><span class="fix">Env vars / secrets / region</span></div>
+          <div class="trouble-row"><span class="prob">6. Quotas</span><span class="fix">IAM & Admin → Quotas</span></div>
+          <div class="trouble-row"><span class="prob">7. Reproduce locally</span><span class="fix">docker run with same env vars</span></div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /ref-gcp -->
+
+  <!-- AWS REF -->
+  <div id="ref-aws" class="ref-content" style="display:none;">
+    <div class="ref-section">
+      <div class="ref-section-title aws">① AWS Pre-Flight Setup</div>
+      <table class="cmd-table aws"><thead><tr><th>STEP</th><th>COMMAND</th><th>PURPOSE</th></tr></thead><tbody>
+        <tr><td>INSTALL CLI</td><td>curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip && unzip awscliv2.zip && sudo ./aws/install</td><td>Install AWS CLI v2</td></tr>
+        <tr><td>CONFIGURE</td><td>aws configure</td><td>Set Access Key, Secret, Region, Output format</td></tr>
+        <tr><td>VERIFY</td><td>aws sts get-caller-identity</td><td>Confirm authenticated identity</td></tr>
+        <tr><td>SET REGION</td><td>aws configure set region us-east-1</td><td>Set default region</td></tr>
+        <tr><td>LIST SERVICES</td><td>aws ec2 describe-instances / aws s3 ls</td><td>Verify CLI access to services</td></tr>
+        <tr><td>IAM CHECK</td><td>aws iam get-user</td><td>Check current IAM user permissions</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title aws">② Path A — EC2 Instance Deployment</div>
+      <div class="flow-row">
+        <div class="fs aws1"><div class="fs-num">01</div><div class="fs-name">Create Key Pair</div><div class="fs-cmd">aws ec2 create-key-pair</div><div class="fs-why">SSH access key</div></div>
+        <div class="fs aws2"><div class="fs-num">02</div><div class="fs-name">Create Security Group</div><div class="fs-cmd">create-security-group</div><div class="fs-why">Firewall for EC2</div></div>
+        <div class="fs aws1"><div class="fs-num">03</div><div class="fs-name">Launch EC2</div><div class="fs-cmd">run-instances</div><div class="fs-why">Provision server</div></div>
+        <div class="fs aws2"><div class="fs-num">04</div><div class="fs-name">SSH In</div><div class="fs-cmd">ssh -i key.pem ec2-user@IP</div><div class="fs-why">Connect to instance</div></div>
+        <div class="fs aws1"><div class="fs-num">05</div><div class="fs-name">Deploy App</div><div class="fs-cmd">scp / git clone</div><div class="fs-why">Transfer code</div></div>
+        <div class="fs aws2"><div class="fs-num">06</div><div class="fs-name">Configure & Run</div><div class="fs-cmd">systemd / nginx</div><div class="fs-why">Run as service</div></div>
+      </div>
+      <table class="cmd-table aws"><thead><tr><th>LABEL</th><th>COMMAND</th><th>PURPOSE</th></tr></thead><tbody>
+        <tr><td>KEY PAIR</td><td>aws ec2 create-key-pair --key-name my-key --query 'KeyMaterial' --output text > my-key.pem</td><td>Create SSH key pair</td></tr>
+        <tr><td>SEC GROUP</td><td>aws ec2 create-security-group --group-name my-sg --description "App SG" --vpc-id VPC_ID</td><td>Create security group</td></tr>
+        <tr><td>ADD RULE</td><td>aws ec2 authorize-security-group-ingress --group-id SG_ID --protocol tcp --port 80 --cidr 0.0.0.0/0</td><td>Open port 80</td></tr>
+        <tr><td>LAUNCH</td><td>aws ec2 run-instances --image-id ami-0abcdef1234567890 --instance-type t3.micro --key-name my-key --security-group-ids SG_ID</td><td>Launch EC2 instance</td></tr>
+        <tr><td>DESCRIBE</td><td>aws ec2 describe-instances --instance-ids i-1234567890abcdef0</td><td>Get instance public IP</td></tr>
+        <tr><td>SSH</td><td>ssh -i my-key.pem ec2-user@PUBLIC_IP</td><td>Connect to instance</td></tr>
+        <tr><td>ELASTIC IP</td><td>aws ec2 allocate-address && aws ec2 associate-address</td><td>Reserve static IP</td></tr>
+        <tr><td>SPOT</td><td>--instance-market-options MarketType=spot</td><td>Use spot instance (cheaper)</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title aws">③ Path B — AWS Lambda (Serverless)</div>
+      <table class="cmd-table aws"><thead><tr><th>LABEL</th><th>COMMAND</th><th>PURPOSE</th></tr></thead><tbody>
+        <tr><td>CREATE ROLE</td><td>aws iam create-role --role-name lambda-role --assume-role-policy-document file://trust.json</td><td>Execution role for Lambda</td></tr>
+        <tr><td>ATTACH POLICY</td><td>aws iam attach-role-policy --role-name lambda-role --policy-arn arn:aws:iam::aws:policy/AWSLambdaBasicExecutionRole</td><td>Grant basic CloudWatch logging</td></tr>
+        <tr><td>ZIP CODE</td><td>zip function.zip index.js</td><td>Package function code</td></tr>
+        <tr><td>CREATE FN</td><td>aws lambda create-function --function-name myFunc --runtime nodejs18.x --role ROLE_ARN --handler index.handler --zip-file fileb://function.zip</td><td>Create Lambda function</td></tr>
+        <tr><td>INVOKE</td><td>aws lambda invoke --function-name myFunc --payload '{"key":"val"}' response.json</td><td>Test function execution</td></tr>
+        <tr><td>UPDATE CODE</td><td>aws lambda update-function-code --function-name myFunc --zip-file fileb://function.zip</td><td>Deploy updated code</td></tr>
+        <tr><td>LOGS</td><td>aws logs tail /aws/lambda/myFunc --follow</td><td>Stream Lambda logs</td></tr>
+        <tr><td>API GATEWAY</td><td>aws apigateway create-rest-api --name myAPI</td><td>HTTP trigger for Lambda</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title aws">④ Path C — ECS (Docker Containers) & EKS (Kubernetes)</div>
+      <table class="cmd-table aws"><thead><tr><th>SERVICE</th><th>COMMAND</th><th>PURPOSE</th></tr></thead><tbody>
+        <tr><td>ECR LOGIN</td><td>aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ACCOUNT.dkr.ecr.REGION.amazonaws.com</td><td>Auth Docker to ECR</td></tr>
+        <tr><td>ECR PUSH</td><td>docker tag myapp:latest ACCOUNT.dkr.ecr.REGION.amazonaws.com/myapp:latest && docker push ...</td><td>Push image to ECR</td></tr>
+        <tr><td>ECS CLUSTER</td><td>aws ecs create-cluster --cluster-name my-cluster</td><td>Create ECS cluster</td></tr>
+        <tr><td>ECS SERVICE</td><td>aws ecs create-service --cluster my-cluster --service-name my-svc --task-definition my-task --desired-count 2 --launch-type FARGATE</td><td>Run containers on Fargate</td></tr>
+        <tr><td>EKS CREATE</td><td>eksctl create cluster --name my-eks --region us-east-1 --nodegroup-name standard --node-type t3.medium --nodes 3</td><td>Provision EKS K8s cluster</td></tr>
+        <tr><td>EKS CREDS</td><td>aws eks update-kubeconfig --region us-east-1 --name my-eks</td><td>Configure kubectl for EKS</td></tr>
+        <tr><td>K8S DEPLOY</td><td>kubectl apply -f deployment.yaml</td><td>Deploy to EKS same as GKE</td></tr>
+        <tr><td>FARGATE</td><td>--launch-type FARGATE (no server management)</td><td>Serverless containers via ECS</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title aws">⑤ AWS Core Services</div>
+      <div class="svc-grid">
+        <div class="svc-card"><span class="svc-tag aws">Amazon S3</span><h4>Object Storage</h4><ul><li><b>Create</b> aws s3 mb s3://my-bucket</li><li><b>Upload</b> aws s3 cp file.txt s3://my-bucket/</li><li><b>Sync</b> aws s3 sync ./dist s3://my-bucket/ --delete</li><li><b>Static web</b> aws s3 website s3://my-bucket/ --index-document index.html</li></ul></div>
+        <div class="svc-card"><span class="svc-tag aws">Amazon RDS</span><h4>Managed Database</h4><ul><li><b>Create</b> aws rds create-db-instance --db-instance-identifier mydb --db-instance-class db.t3.micro --engine postgres</li><li><b>Connect</b> Via private subnet + security group</li><li><b>Backup</b> Automated backups, snapshots</li></ul></div>
+        <div class="svc-card"><span class="svc-tag aws">Elastic Load Balancer</span><h4>ALB / NLB</h4><ul><li><b>ALB</b> Layer 7, path/host routing, HTTPS termination</li><li><b>NLB</b> Layer 4, ultra-low latency, TCP/UDP</li><li><b>Target Group</b> EC2 instances or ECS tasks as backends</li></ul></div>
+        <div class="svc-card"><span class="svc-tag aws">Amazon VPC</span><h4>Private Network</h4><ul><li><b>Create</b> aws ec2 create-vpc --cidr-block 10.0.0.0/16</li><li><b>Subnet</b> aws ec2 create-subnet --vpc-id VPC_ID --cidr-block 10.0.1.0/24</li><li><b>IGW</b> Internet Gateway for public subnet access</li></ul></div>
+        <div class="svc-card"><span class="svc-tag aws">AWS IAM</span><h4>Identity & Access</h4><ul><li><b>Create user</b> aws iam create-user --user-name dev</li><li><b>Create role</b> aws iam create-role --role-name my-role</li><li><b>Attach policy</b> aws iam attach-user-policy</li><li><b>Rule</b> Use roles not users for services</li></ul></div>
+        <div class="svc-card"><span class="svc-tag aws">Secrets Manager</span><h4>Secret Storage</h4><ul><li><b>Create</b> aws secretsmanager create-secret --name DB_PASS --secret-string "mypass"</li><li><b>Get</b> aws secretsmanager get-secret-value --secret-id DB_PASS</li><li><b>Rule</b> Never hardcode secrets</li></ul></div>
+        <div class="svc-card"><span class="svc-tag aws">CloudWatch</span><h4>Logs & Monitoring</h4><ul><li><b>Logs</b> aws logs tail /aws/lambda/myFunc --follow</li><li><b>Metrics</b> CPU, memory, request count dashboards</li><li><b>Alarms</b> aws cloudwatch put-metric-alarm</li></ul></div>
+        <div class="svc-card"><span class="svc-tag aws">Route 53</span><h4>DNS</h4><ul><li><b>Create zone</b> aws route53 create-hosted-zone --name mydomain.com</li><li><b>A record</b> aws route53 change-resource-record-sets</li><li><b>Health check</b> Route to healthy endpoints automatically</li></ul></div>
+        <div class="svc-card"><span class="svc-tag aws">CodePipeline</span><h4>CI/CD</h4><ul><li><b>Source</b> CodeCommit / GitHub / S3</li><li><b>Build</b> CodeBuild → run tests, build Docker</li><li><b>Deploy</b> CodeDeploy → EC2, Lambda, ECS</li></ul></div>
+        <div class="svc-card"><span class="svc-tag aws">CloudFront</span><h4>CDN</h4><ul><li><b>Purpose</b> Serve content from 450+ edge locations</li><li><b>Origin</b> S3 bucket or ALB backend</li><li><b>HTTPS</b> Free SSL cert via ACM</li></ul></div>
+        <div class="svc-card"><span class="svc-tag aws">AWS WAF</span><h4>Web App Firewall</h4><ul><li><b>Purpose</b> Block OWASP Top 10, rate limit, geo-block</li><li><b>Attach to</b> ALB, CloudFront, API Gateway</li><li><b>Rules</b> Managed rule groups or custom</li></ul></div>
+        <div class="svc-card"><span class="svc-tag aws">DynamoDB</span><h4>Serverless NoSQL</h4><ul><li><b>Create</b> aws dynamodb create-table --table-name Users --attribute-definitions ...</li><li><b>Get item</b> aws dynamodb get-item --table-name Users --key ...</li><li><b>Auto-scale</b> On-demand capacity mode</li></ul></div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title red">⑥ Troubleshooting — AWS Common Issues</div>
+      <div class="trouble-grid">
+        <div class="trouble-card red"><h4>🔴 IAM / Permissions</h4>
+          <div class="trouble-row"><span class="prob">Access Denied</span><span class="fix">Check IAM policy attached to role/user</span></div>
+          <div class="trouble-row"><span class="prob">Service can't assume role</span><span class="fix">Check trust policy on the role</span></div>
+          <div class="trouble-row"><span class="prob">MFA required</span><span class="fix">aws sts get-session-token --serial-number</span></div>
+        </div>
+        <div class="trouble-card yellow"><h4>🟡 EC2 / Networking</h4>
+          <div class="trouble-row"><span class="prob">Can't SSH to EC2</span><span class="fix">SG inbound rule port 22 + key pair correct</span></div>
+          <div class="trouble-row"><span class="prob">EC2 not reachable on port 80</span><span class="fix">Security group inbound + NACL + route table</span></div>
+          <div class="trouble-row"><span class="prob">Lambda timeout</span><span class="fix">Increase timeout and check VPC ENI creation</span></div>
+        </div>
+        <div class="trouble-card yellow"><h4>🟡 ECS / Containers</h4>
+          <div class="trouble-row"><span class="prob">Task stopped immediately</span><span class="fix">CloudWatch logs → container exit code</span></div>
+          <div class="trouble-row"><span class="prob">ECR auth error</span><span class="fix">Re-run ecr get-login-password docker login</span></div>
+          <div class="trouble-row"><span class="prob">Fargate can't pull image</span><span class="fix">Task role needs ecr:GetAuthorizationToken</span></div>
+        </div>
+        <div class="trouble-card green"><h4>🟢 AWS Debug Flow</h4>
+          <div class="trouble-row"><span class="prob">1. CloudWatch Logs</span><span class="fix">aws logs tail GROUP --follow</span></div>
+          <div class="trouble-row"><span class="prob">2. Resource state</span><span class="fix">describe-instances / describe-services</span></div>
+          <div class="trouble-row"><span class="prob">3. Security Groups</span><span class="fix">Inbound/outbound rules + NACLs</span></div>
+          <div class="trouble-row"><span class="prob">4. IAM Policy</span><span class="fix">aws iam simulate-principal-policy</span></div>
+          <div class="trouble-row"><span class="prob">5. Service Quotas</span><span class="fix">Console → Service Quotas</span></div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /ref-aws -->
+
+  <!-- AZURE REF -->
+  <div id="ref-az" class="ref-content" style="display:none;">
+    <div class="ref-section">
+      <div class="ref-section-title az">① Azure Pre-Flight Setup</div>
+      <table class="cmd-table az"><thead><tr><th>STEP</th><th>COMMAND</th><th>PURPOSE</th></tr></thead><tbody>
+        <tr><td>INSTALL</td><td>curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash</td><td>Install Azure CLI</td></tr>
+        <tr><td>LOGIN</td><td>az login</td><td>Authenticate with Azure AD</td></tr>
+        <tr><td>SET SUB</td><td>az account set --subscription SUBSCRIPTION_ID</td><td>Target the right subscription</td></tr>
+        <tr><td>LIST SUBS</td><td>az account list --output table</td><td>See all subscriptions</td></tr>
+        <tr><td>CREATE RG</td><td>az group create --name my-rg --location eastus</td><td>Resource group = logical container for all resources</td></tr>
+        <tr><td>VERIFY</td><td>az account show</td><td>Confirm active subscription/tenant</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title az">② Path A — Azure Virtual Machines</div>
+      <table class="cmd-table az"><thead><tr><th>LABEL</th><th>COMMAND</th><th>PURPOSE</th></tr></thead><tbody>
+        <tr><td>CREATE VM</td><td>az vm create --resource-group my-rg --name my-vm --image UbuntuLTS --size Standard_B2s --admin-username azureuser --generate-ssh-keys</td><td>Provision VM with auto SSH key</td></tr>
+        <tr><td>OPEN PORT</td><td>az vm open-port --port 80 --resource-group my-rg --name my-vm</td><td>Open port in NSG</td></tr>
+        <tr><td>GET IP</td><td>az vm show -d -g my-rg -n my-vm --query publicIps -o tsv</td><td>Get public IP address</td></tr>
+        <tr><td>SSH</td><td>ssh azureuser@PUBLIC_IP</td><td>Connect to VM</td></tr>
+        <tr><td>UPLOAD FILE</td><td>scp ./app.tar.gz azureuser@PUBLIC_IP:~/</td><td>Copy files to VM</td></tr>
+        <tr><td>SPOT VM</td><td>--priority Spot --max-price 0.05 --eviction-policy Deallocate</td><td>Use spot pricing (cheaper)</td></tr>
+        <tr><td>START/STOP</td><td>az vm start/deallocate -g my-rg -n my-vm</td><td>Start or deallocate VM (stop billing)</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title az">③ Path B — Azure App Service & Container Apps</div>
+      <table class="cmd-table az"><thead><tr><th>LABEL</th><th>COMMAND</th><th>PURPOSE</th></tr></thead><tbody>
+        <tr><td>CREATE PLAN</td><td>az appservice plan create --name my-plan --resource-group my-rg --sku B1 --is-linux</td><td>App Service Plan = compute tier</td></tr>
+        <tr><td>CREATE APP</td><td>az webapp create --resource-group my-rg --plan my-plan --name my-app --runtime "NODE:18-lts"</td><td>Create web app (PaaS)</td></tr>
+        <tr><td>DEPLOY ZIP</td><td>az webapp deploy --resource-group my-rg --name my-app --src-path ./app.zip</td><td>Deploy app from zip file</td></tr>
+        <tr><td>DEPLOY CONT</td><td>az webapp create --deployment-container-image-name mcr.microsoft.com/appsvc/node:18-lts</td><td>Deploy Docker container to App Service</td></tr>
+        <tr><td>CONTAINER APP</td><td>az containerapp create --name my-app --resource-group my-rg --environment my-env --image REGISTRY/myapp:v1 --target-port 80</td><td>Azure Container Apps (like Cloud Run)</td></tr>
+        <tr><td>APP LOGS</td><td>az webapp log tail --name my-app --resource-group my-rg</td><td>Stream live application logs</td></tr>
+        <tr><td>ENV VARS</td><td>az webapp config appsettings set --name my-app -g my-rg --settings KEY=VALUE</td><td>Set environment variables</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title az">④ Path C — Azure Kubernetes Service (AKS)</div>
+      <table class="cmd-table az"><thead><tr><th>LABEL</th><th>COMMAND</th><th>PURPOSE</th></tr></thead><tbody>
+        <tr><td>CREATE CLUSTER</td><td>az aks create --resource-group my-rg --name my-aks --node-count 3 --node-vm-size Standard_D2s_v3 --generate-ssh-keys</td><td>Provision AKS cluster</td></tr>
+        <tr><td>GET CREDS</td><td>az aks get-credentials --resource-group my-rg --name my-aks</td><td>Configure kubectl for AKS</td></tr>
+        <tr><td>ACR LOGIN</td><td>az acr login --name myACR</td><td>Auth Docker to Azure Container Registry</td></tr>
+        <tr><td>ACR PUSH</td><td>docker tag myapp myACR.azurecr.io/myapp:v1 && docker push myACR.azurecr.io/myapp:v1</td><td>Push image to ACR</td></tr>
+        <tr><td>ATTACH ACR</td><td>az aks update -n my-aks -g my-rg --attach-acr myACR</td><td>Grant AKS permission to pull from ACR</td></tr>
+        <tr><td>K8S DEPLOY</td><td>kubectl apply -f deployment.yaml</td><td>Deploy same as GKE/EKS</td></tr>
+        <tr><td>SCALE</td><td>az aks scale --resource-group my-rg --name my-aks --node-count 5</td><td>Scale cluster node count</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title az">⑤ Azure Core Services</div>
+      <div class="svc-grid">
+        <div class="svc-card"><span class="svc-tag az">Azure Blob Storage</span><h4>Object Storage</h4><ul><li><b>Create</b> az storage account create --name mystore --resource-group my-rg --sku Standard_LRS</li><li><b>Upload</b> az storage blob upload --container-name mycontainer --file ./file.txt</li><li><b>Static web</b> az storage blob service-properties update --static-website</li></ul></div>
+        <div class="svc-card"><span class="svc-tag az">Azure SQL / PostgreSQL</span><h4>Managed Database</h4><ul><li><b>Create SQL</b> az sql server create --name my-sql --resource-group my-rg --admin-user sa --admin-password PASS</li><li><b>Create Postgres</b> az postgres flexible-server create --resource-group my-rg --name my-pg</li><li><b>Firewall</b> az sql server firewall-rule create</li></ul></div>
+        <div class="svc-card"><span class="svc-tag az">Azure VNet</span><h4>Virtual Network</h4><ul><li><b>Create</b> az network vnet create --name my-vnet --resource-group my-rg --address-prefix 10.0.0.0/16</li><li><b>Subnet</b> az network vnet subnet create</li><li><b>NSG</b> Network Security Group = firewall rules</li></ul></div>
+        <div class="svc-card"><span class="svc-tag az">Azure Load Balancer</span><h4>Traffic Distribution</h4><ul><li><b>ALB</b> Application Gateway — Layer 7, WAF, SSL</li><li><b>NLB</b> Azure Load Balancer — Layer 4, TCP/UDP</li><li><b>Front Door</b> Global CDN + WAF + load balancer</li></ul></div>
+        <div class="svc-card"><span class="svc-tag az">Azure DevOps</span><h4>CI/CD</h4><ul><li><b>Pipelines</b> YAML-based CI/CD, similar to GitHub Actions</li><li><b>Repos</b> Git repositories hosted in Azure</li><li><b>Artifacts</b> Package management (npm, NuGet, etc.)</li></ul></div>
+        <div class="svc-card"><span class="svc-tag az">Azure Key Vault</span><h4>Secrets & Certs</h4><ul><li><b>Create</b> az keyvault create --name my-kv --resource-group my-rg</li><li><b>Set secret</b> az keyvault secret set --vault-name my-kv --name DB_PASS --value mypass</li><li><b>Access</b> Managed Identity — no credentials in code</li></ul></div>
+        <div class="svc-card"><span class="svc-tag az">Azure Monitor</span><h4>Observability</h4><ul><li><b>Logs</b> Log Analytics workspace — query with KQL</li><li><b>Metrics</b> CPU, memory, response time charts</li><li><b>Alerts</b> az monitor alert create</li></ul></div>
+        <div class="svc-card"><span class="svc-tag az">Azure Functions</span><h4>Serverless</h4><ul><li><b>Create</b> az functionapp create --resource-group my-rg --name my-func --consumption-plan-location eastus --runtime node</li><li><b>Deploy</b> func azure functionapp publish my-func</li><li><b>Triggers</b> HTTP, Timer, Queue, Blob, EventGrid</li></ul></div>
+        <div class="svc-card"><span class="svc-tag az">Azure CDN / Front Door</span><h4>Content Delivery</h4><ul><li><b>CDN</b> az cdn profile create + endpoint create</li><li><b>Front Door</b> Global LB + CDN + WAF in one service</li><li><b>Custom domain</b> az cdn custom-domain create</li></ul></div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title red">⑥ Troubleshooting — Azure Common Issues</div>
+      <div class="trouble-grid">
+        <div class="trouble-card red"><h4>🔴 Auth / RBAC</h4>
+          <div class="trouble-row"><span class="prob">AuthorizationFailed</span><span class="fix">Check RBAC role assigned in Access Control (IAM)</span></div>
+          <div class="trouble-row"><span class="prob">Subscription not found</span><span class="fix">az account set --subscription ID</span></div>
+          <div class="trouble-row"><span class="prob">Managed Identity error</span><span class="fix">Enable system-assigned identity on resource</span></div>
+        </div>
+        <div class="trouble-card yellow"><h4>🟡 Networking / NSG</h4>
+          <div class="trouble-row"><span class="prob">Can't reach VM</span><span class="fix">Check NSG inbound rules + effective routes</span></div>
+          <div class="trouble-row"><span class="prob">App Service 503</span><span class="fix">Scale up plan or check outbound connections</span></div>
+          <div class="trouble-row"><span class="prob">AKS pods can't reach service</span><span class="fix">Check network policy + NSG on subnet</span></div>
+        </div>
+        <div class="trouble-card green"><h4>🟢 Azure Debug Flow</h4>
+          <div class="trouble-row"><span class="prob">1. Activity Log</span><span class="fix">Azure Portal → Resource → Activity log</span></div>
+          <div class="trouble-row"><span class="prob">2. Diagnose & Solve</span><span class="fix">Built-in troubleshooter per service</span></div>
+          <div class="trouble-row"><span class="prob">3. NSG Flow Logs</span><span class="fix">Network Watcher → Flow logs</span></div>
+          <div class="trouble-row"><span class="prob">4. RBAC</span><span class="fix">Check role assignments at resource level</span></div>
+          <div class="trouble-row"><span class="prob">5. Service Health</span><span class="fix">portal.azure.com → Service Health</span></div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /ref-az -->
+
+  <!-- CLOUDFLARE REF -->
+  <div id="ref-cf" class="ref-content" style="display:none;">
+    <div class="ref-section">
+      <div class="ref-section-title cf">① Cloudflare Setup & CLI</div>
+      <table class="cmd-table cf"><thead><tr><th>STEP</th><th>COMMAND</th><th>PURPOSE</th></tr></thead><tbody>
+        <tr><td>INSTALL CLI</td><td>npm install -g wrangler</td><td>Wrangler CLI — manage Workers, R2, D1, Pages</td></tr>
+        <tr><td>LOGIN</td><td>wrangler login</td><td>Authenticate with Cloudflare account</td></tr>
+        <tr><td>ZONE LIST</td><td>wrangler zones list</td><td>List your domains/zones</td></tr>
+        <tr><td>WHOAMI</td><td>wrangler whoami</td><td>Show current auth identity</td></tr>
+        <tr><td>API TOKEN</td><td>Create at dash.cloudflare.com → My Profile → API Tokens</td><td>Use for CI/CD automation</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title cf">② Path A — Cloudflare Workers (Serverless Edge)</div>
+      <table class="cmd-table cf"><thead><tr><th>LABEL</th><th>COMMAND</th><th>PURPOSE</th></tr></thead><tbody>
+        <tr><td>INIT PROJECT</td><td>wrangler init my-worker</td><td>Scaffold new Worker project</td></tr>
+        <tr><td>LOCAL DEV</td><td>wrangler dev</td><td>Run Worker locally with live reload</td></tr>
+        <tr><td>DEPLOY</td><td>wrangler deploy</td><td>Deploy Worker to Cloudflare edge (200+ locations)</td></tr>
+        <tr><td>SET ROUTE</td><td>wrangler deploy --route "mydomain.com/api/*"</td><td>Attach Worker to URL pattern</td></tr>
+        <tr><td>ENV SECRET</td><td>wrangler secret put API_KEY</td><td>Securely inject secret into Worker</td></tr>
+        <tr><td>KV CREATE</td><td>wrangler kv namespace create MY_KV</td><td>Create KV store for Worker state</td></tr>
+        <tr><td>KV GET/PUT</td><td>wrangler kv key put --namespace-id ID "key" "value"</td><td>Read/write KV from CLI</td></tr>
+        <tr><td>LOGS</td><td>wrangler tail</td><td>Stream live Worker logs</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title cf">③ Path B — Cloudflare Pages (Frontend Hosting)</div>
+      <table class="cmd-table cf"><thead><tr><th>LABEL</th><th>COMMAND</th><th>PURPOSE</th></tr></thead><tbody>
+        <tr><td>DEPLOY DIR</td><td>wrangler pages deploy ./dist --project-name my-site</td><td>Deploy static site from dist/ folder</td></tr>
+        <tr><td>GIT DEPLOY</td><td>Connect GitHub repo in Pages Dashboard → auto-deploy on push</td><td>CI/CD for frontend — build + deploy on every push</td></tr>
+        <tr><td>CUSTOM DOMAIN</td><td>Pages Dashboard → Custom Domains → Add domain</td><td>Map your domain to Pages site</td></tr>
+        <tr><td>ENV VARS</td><td>Pages Dashboard → Settings → Environment Variables</td><td>Inject build/runtime variables</td></tr>
+        <tr><td>PREVIEW</td><td>Every PR gets a unique preview URL automatically</td><td>Test before merging to production</td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title cf">④ Cloudflare Core Services</div>
+      <div class="svc-grid">
+        <div class="svc-card"><span class="svc-tag cf">Cloudflare DNS</span><h4>Ultra-fast DNS</h4><ul><li><b>Add record</b> Dashboard → DNS → Add Record</li><li><b>Proxy</b> Orange cloud = traffic routed through CF (CDN + DDoS)</li><li><b>Gray cloud</b> DNS only — bypasses Cloudflare proxy</li><li><b>API</b> curl -X POST "https://api.cloudflare.com/client/v4/zones/ZONE_ID/dns_records"</li></ul></div>
+        <div class="svc-card"><span class="svc-tag cf">Cloudflare CDN</span><h4>Content Delivery</h4><ul><li><b>Auto-enabled</b> when DNS proxy (orange cloud) is on</li><li><b>Cache rules</b> Dashboard → Caching → Cache Rules</li><li><b>Purge</b> Dashboard → Caching → Purge Everything / Custom Purge</li><li><b>Analytics</b> See cache hit ratio, bandwidth saved</li></ul></div>
+        <div class="svc-card"><span class="svc-tag cf">Cloudflare WAF</span><h4>Web App Firewall</h4><ul><li><b>Managed rules</b> OWASP Core Rule Set pre-configured</li><li><b>Custom rules</b> Block by IP, country, user-agent, path</li><li><b>Rate limit</b> N requests per second per IP</li><li><b>Bot fight mode</b> Block malicious bots automatically</li></ul></div>
+        <div class="svc-card"><span class="svc-tag cf">Cloudflare R2</span><h4>Object Storage (no egress fees)</h4><ul><li><b>Create bucket</b> wrangler r2 bucket create my-bucket</li><li><b>Upload</b> wrangler r2 object put my-bucket/file.txt --file ./file.txt</li><li><b>Public URL</b> Enable public access in dashboard → r2.dev subdomain</li><li><b>S3-compatible</b> Use S3 SDK with CF R2 endpoint</li></ul></div>
+        <div class="svc-card"><span class="svc-tag cf">Cloudflare Tunnel</span><h4>Zero-Trust Access</h4><ul><li><b>Purpose</b> Expose local/private services without opening firewall ports</li><li><b>Install</b> cloudflared tunnel create my-tunnel</li><li><b>Run</b> cloudflared tunnel run my-tunnel</li><li><b>Config</b> Map tunnel → hostname in ingress rules</li></ul></div>
+        <div class="svc-card"><span class="svc-tag cf">Cloudflare D1</span><h4>Serverless SQLite at Edge</h4><ul><li><b>Create DB</b> wrangler d1 create my-db</li><li><b>Run SQL</b> wrangler d1 execute my-db --command "CREATE TABLE users ..."</li><li><b>In Worker</b> env.DB.prepare("SELECT * FROM users").all()</li><li><b>Use case</b> Low-latency data reads globally</li></ul></div>
+        <div class="svc-card"><span class="svc-tag cf">Load Balancing</span><h4>Traffic Routing</h4><ul><li><b>Purpose</b> Route to multiple origins, health-check failover</li><li><b>Origins</b> Pool of servers — traffic distributed across them</li><li><b>Health checks</b> Auto-remove unhealthy origins from pool</li><li><b>Geo steering</b> Route users to nearest origin by region</li></ul></div>
+        <div class="svc-card"><span class="svc-tag cf">Zero Trust (ZTNA)</span><h4>Secure Access</h4><ul><li><b>Access</b> Protect internal apps behind SSO/MFA</li><li><b>Gateway</b> DNS/HTTP filtering for outbound traffic</li><li><b>WARP</b> Device agent — routes employee traffic through CF</li><li><b>Replaces</b> Traditional VPN</li></ul></div>
+      </div>
+    </div>
+
+    <div class="ref-section">
+      <div class="ref-section-title red">⑤ Troubleshooting — Cloudflare Common Issues</div>
+      <div class="trouble-grid">
+        <div class="trouble-card red"><h4>🔴 DNS / Routing</h4>
+          <div class="trouble-row"><span class="prob">DNS not resolving</span><span class="fix">Check NS records at registrar point to CF</span></div>
+          <div class="trouble-row"><span class="prob">525 SSL Handshake Failed</span><span class="fix">Origin cert invalid — use Full (strict) mode</span></div>
+          <div class="trouble-row"><span class="prob">521 Origin Down</span><span class="fix">Origin server unreachable — check firewall allows CF IPs</span></div>
+        </div>
+        <div class="trouble-card yellow"><h4>🟡 Cache / CDN</h4>
+          <div class="trouble-row"><span class="prob">Stale content serving</span><span class="fix">Purge cache in Dashboard → Caching</span></div>
+          <div class="trouble-row"><span class="prob">Dynamic content cached</span><span class="fix">Set Cache-Control: no-store on API responses</span></div>
+          <div class="trouble-row"><span class="prob">Workers not updating</span><span class="fix">wrangler deploy — check version in dashboard</span></div>
+        </div>
+        <div class="trouble-card green"><h4>🟢 CF Debug Flow</h4>
+          <div class="trouble-row"><span class="prob">1. Check CF Status</span><span class="fix">cloudflarestatus.com</span></div>
+          <div class="trouble-row"><span class="prob">2. Test origin direct</span><span class="fix">curl --resolve domain:80:ORIGIN_IP http://domain</span></div>
+          <div class="trouble-row"><span class="prob">3. Ray ID</span><span class="fix">Error pages show CF-Ray ID — search in Analytics</span></div>
+          <div class="trouble-row"><span class="prob">4. Pause CF on domain</span><span class="fix">Bypass CF temporarily to isolate issue</span></div>
+          <div class="trouble-row"><span class="prob">5. WAF logs</span><span class="fix">Security → Events — check if WAF blocked request</span></div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /ref-cf -->
+
+</div><!-- /page-ref -->
+
+<!-- ════════════════════════════════════
+     CHECKLIST PAGE
+════════════════════════════════════ -->
+<div class="page" id="page-checklist">
+  <div class="checklist-header">
+    <h2>Deployment Checklist</h2>
+    <p>Select your cloud platform, deployment target, and add-on services — then generate a step-by-step checklist.</p>
+  </div>
+
+  <div class="checklist-inner">
+
+    <!-- CLOUD PROVIDER TABS -->
+    <div class="cloud-tabs">
+      <button class="cloud-tab active gcp" id="cltab-gcp" onclick="switchChecklistCloud('gcp')">☁️ GCP</button>
+      <button class="cloud-tab aws" id="cltab-aws" onclick="switchChecklistCloud('aws')">🟠 AWS</button>
+      <button class="cloud-tab az" id="cltab-az" onclick="switchChecklistCloud('az')">🔷 Azure</button>
+      <button class="cloud-tab cf" id="cltab-cf" onclick="switchChecklistCloud('cf')">🟡 Cloudflare</button>
+    </div>
+
+    <!-- SELECTOR SECTION -->
+    <div class="selector-section">
+      <h3 id="cl-selector-title">Step 1 — Select GCP deployment target</h3>
+      <p id="cl-selector-sub">Choose the primary compute service you're deploying to.</p>
+
+      <!-- GCP primary services -->
+      <div id="primary-gcp" class="service-selector-grid">
+        <div class="service-option" onclick="selectService('gce','gcp')" id="svc-gce"><div class="check-badge">✓</div><div class="svc-icon">🖥️</div><div class="svc-name">GCE VM</div><div class="svc-desc">Virtual Machine</div></div>
+        <div class="service-option" onclick="selectService('cloudrun','gcp')" id="svc-cloudrun"><div class="check-badge">✓</div><div class="svc-icon">🚀</div><div class="svc-name">Cloud Run</div><div class="svc-desc">Serverless container</div></div>
+        <div class="service-option" onclick="selectService('gke','gcp')" id="svc-gke"><div class="check-badge">✓</div><div class="svc-icon">☸️</div><div class="svc-name">GKE</div><div class="svc-desc">Kubernetes</div></div>
+        <div class="service-option" onclick="selectService('gae','gcp')" id="svc-gae"><div class="check-badge">✓</div><div class="svc-icon">⚙️</div><div class="svc-name">App Engine</div><div class="svc-desc">PaaS deploy</div></div>
+        <div class="service-option" onclick="selectService('gcf','gcp')" id="svc-gcf"><div class="check-badge">✓</div><div class="svc-icon">⚡</div><div class="svc-name">Cloud Functions</div><div class="svc-desc">Event-driven fn</div></div>
+      </div>
+
+      <!-- AWS primary services -->
+      <div id="primary-aws" class="service-selector-grid" style="display:none;">
+        <div class="service-option" onclick="selectService('ec2','aws')" id="svc-ec2"><div class="check-badge">✓</div><div class="svc-icon">🖥️</div><div class="svc-name">EC2</div><div class="svc-desc">Virtual server</div></div>
+        <div class="service-option" onclick="selectService('lambda','aws')" id="svc-lambda"><div class="check-badge">✓</div><div class="svc-icon">⚡</div><div class="svc-name">Lambda</div><div class="svc-desc">Serverless fn</div></div>
+        <div class="service-option" onclick="selectService('ecs','aws')" id="svc-ecs"><div class="check-badge">✓</div><div class="svc-icon">🐳</div><div class="svc-name">ECS + Fargate</div><div class="svc-desc">Container service</div></div>
+        <div class="service-option" onclick="selectService('eks','aws')" id="svc-eks"><div class="check-badge">✓</div><div class="svc-icon">☸️</div><div class="svc-name">EKS</div><div class="svc-desc">Managed K8s</div></div>
+        <div class="service-option" onclick="selectService('beanstalk','aws')" id="svc-beanstalk"><div class="check-badge">✓</div><div class="svc-icon">🌿</div><div class="svc-name">Elastic Beanstalk</div><div class="svc-desc">PaaS deploy</div></div>
+      </div>
+
+      <!-- Azure primary services -->
+      <div id="primary-az" class="service-selector-grid" style="display:none;">
+        <div class="service-option" onclick="selectService('azvm','az')" id="svc-azvm"><div class="check-badge">✓</div><div class="svc-icon">🖥️</div><div class="svc-name">Azure VM</div><div class="svc-desc">Virtual Machine</div></div>
+        <div class="service-option" onclick="selectService('appsvc','az')" id="svc-appsvc"><div class="check-badge">✓</div><div class="svc-icon">🌐</div><div class="svc-name">App Service</div><div class="svc-desc">PaaS web app</div></div>
+        <div class="service-option" onclick="selectService('aks','az')" id="svc-aks"><div class="check-badge">✓</div><div class="svc-icon">☸️</div><div class="svc-name">AKS</div><div class="svc-desc">Managed K8s</div></div>
+        <div class="service-option" onclick="selectService('azfn','az')" id="svc-azfn"><div class="check-badge">✓</div><div class="svc-icon">⚡</div><div class="svc-name">Azure Functions</div><div class="svc-desc">Serverless fn</div></div>
+        <div class="service-option" onclick="selectService('contapps','az')" id="svc-contapps"><div class="check-badge">✓</div><div class="svc-icon">🚀</div><div class="svc-name">Container Apps</div><div class="svc-desc">Modern microsvcs</div></div>
+      </div>
+
+      <!-- Cloudflare primary services -->
+      <div id="primary-cf" class="service-selector-grid" style="display:none;">
+        <div class="service-option" onclick="selectService('workers','cf')" id="svc-workers"><div class="check-badge">✓</div><div class="svc-icon">⚡</div><div class="svc-name">Workers</div><div class="svc-desc">Serverless edge fn</div></div>
+        <div class="service-option" onclick="selectService('pages','cf')" id="svc-pages"><div class="check-badge">✓</div><div class="svc-icon">🌐</div><div class="svc-name">Pages</div><div class="svc-desc">Static site hosting</div></div>
+        <div class="service-option" onclick="selectService('tunnel','cf')" id="svc-tunnel"><div class="check-badge">✓</div><div class="svc-icon">🔌</div><div class="svc-name">Tunnel</div><div class="svc-desc">Expose private svc</div></div>
+      </div>
+
+      <!-- ADD-ON SERVICES -->
+      <div class="extra-services">
+        <h4>Step 2 — Add-on services (optional)</h4>
+
+        <!-- GCP Add-ons -->
+        <div id="extras-gcp" class="extra-grid">
+          <div class="chip-category">Networking</div>
+          <div class="extra-chip" onclick="toggleExtra('vpc','gcp')" id="extra-vpc">🌐 VPC Network</div>
+          <div class="extra-chip" onclick="toggleExtra('vpcconn','gcp')" id="extra-vpcconn">🔌 VPC Connector</div>
+          <div class="extra-chip" onclick="toggleExtra('alb','gcp')" id="extra-alb">🚦 App Load Balancer</div>
+          <div class="extra-chip" onclick="toggleExtra('firewall','gcp')" id="extra-firewall">🔥 Firewall Rules</div>
+          <div class="extra-chip" onclick="toggleExtra('nat','gcp')" id="extra-nat">🔄 Cloud NAT</div>
+          <div class="extra-chip" onclick="toggleExtra('dns','gcp')" id="extra-dns">🌍 Cloud DNS</div>
+          <div class="chip-category">Data & Storage</div>
+          <div class="extra-chip" onclick="toggleExtra('cloudsql','gcp')" id="extra-cloudsql">🗄️ Cloud SQL</div>
+          <div class="extra-chip" onclick="toggleExtra('gcs','gcp')" id="extra-gcs">🗂️ Cloud Storage</div>
+          <div class="extra-chip" onclick="toggleExtra('pubsub','gcp')" id="extra-pubsub">📨 Pub/Sub</div>
+          <div class="extra-chip" onclick="toggleExtra('memstore','gcp')" id="extra-memstore">⚡ Memorystore (Redis)</div>
+          <div class="chip-category">Security & DevOps</div>
+          <div class="extra-chip" onclick="toggleExtra('iam','gcp')" id="extra-iam">🛡️ IAM & Admin</div>
+          <div class="extra-chip" onclick="toggleExtra('secrets','gcp')" id="extra-secrets">🔐 Secret Manager</div>
+          <div class="extra-chip" onclick="toggleExtra('registry','gcp')" id="extra-registry">📦 Artifact Registry</div>
+          <div class="extra-chip" onclick="toggleExtra('cicd','gcp')" id="extra-cicd">🔨 Cloud Build</div>
+          <div class="extra-chip" onclick="toggleExtra('armor','gcp')" id="extra-armor">🛡️ Cloud Armor (WAF)</div>
+          <div class="extra-chip" onclick="toggleExtra('cdn','gcp')" id="extra-cdn">⚡ Cloud CDN</div>
+          <div class="extra-chip" onclick="toggleExtra('monitoring','gcp')" id="extra-monitoring">📊 Monitoring & Logging</div>
+          <div class="extra-chip" onclick="toggleExtra('endpoints','gcp')" id="extra-endpoints">🔗 Cloud Endpoints</div>
+        </div>
+
+        <!-- AWS Add-ons -->
+        <div id="extras-aws" class="extra-grid" style="display:none;">
+          <div class="chip-category">Networking</div>
+          <div class="extra-chip" onclick="toggleExtra('awsvpc','aws')" id="extra-awsvpc">🌐 VPC</div>
+          <div class="extra-chip" onclick="toggleExtra('alb_aws','aws')" id="extra-alb_aws">🚦 ALB / NLB</div>
+          <div class="extra-chip" onclick="toggleExtra('route53','aws')" id="extra-route53">🌍 Route 53</div>
+          <div class="extra-chip" onclick="toggleExtra('cloudfront','aws')" id="extra-cloudfront">⚡ CloudFront (CDN)</div>
+          <div class="chip-category">Data & Storage</div>
+          <div class="extra-chip" onclick="toggleExtra('s3','aws')" id="extra-s3">🗂️ S3</div>
+          <div class="extra-chip" onclick="toggleExtra('rds','aws')" id="extra-rds">🗄️ RDS</div>
+          <div class="extra-chip" onclick="toggleExtra('dynamodb','aws')" id="extra-dynamodb">🔢 DynamoDB</div>
+          <div class="extra-chip" onclick="toggleExtra('elasticache','aws')" id="extra-elasticache">⚡ ElastiCache (Redis)</div>
+          <div class="extra-chip" onclick="toggleExtra('sqs','aws')" id="extra-sqs">📨 SQS</div>
+          <div class="extra-chip" onclick="toggleExtra('sns','aws')" id="extra-sns">📣 SNS</div>
+          <div class="chip-category">Security & DevOps</div>
+          <div class="extra-chip" onclick="toggleExtra('awsiam','aws')" id="extra-awsiam">🛡️ IAM</div>
+          <div class="extra-chip" onclick="toggleExtra('awssecrets','aws')" id="extra-awssecrets">🔐 Secrets Manager</div>
+          <div class="extra-chip" onclick="toggleExtra('ecr','aws')" id="extra-ecr">📦 ECR</div>
+          <div class="extra-chip" onclick="toggleExtra('codepipeline','aws')" id="extra-codepipeline">🔨 CodePipeline</div>
+          <div class="extra-chip" onclick="toggleExtra('waf_aws','aws')" id="extra-waf_aws">🛡️ AWS WAF</div>
+          <div class="extra-chip" onclick="toggleExtra('cloudwatch','aws')" id="extra-cloudwatch">📊 CloudWatch</div>
+        </div>
+
+        <!-- Azure Add-ons -->
+        <div id="extras-az" class="extra-grid" style="display:none;">
+          <div class="chip-category">Networking</div>
+          <div class="extra-chip" onclick="toggleExtra('azvnet','az')" id="extra-azvnet">🌐 VNet</div>
+          <div class="extra-chip" onclick="toggleExtra('azlb','az')" id="extra-azlb">🚦 Load Balancer / App Gateway</div>
+          <div class="extra-chip" onclick="toggleExtra('azdns','az')" id="extra-azdns">🌍 Azure DNS</div>
+          <div class="extra-chip" onclick="toggleExtra('azcdn','az')" id="extra-azcdn">⚡ Azure CDN / Front Door</div>
+          <div class="chip-category">Data & Storage</div>
+          <div class="extra-chip" onclick="toggleExtra('azblob','az')" id="extra-azblob">🗂️ Blob Storage</div>
+          <div class="extra-chip" onclick="toggleExtra('azsql','az')" id="extra-azsql">🗄️ Azure SQL / PostgreSQL</div>
+          <div class="extra-chip" onclick="toggleExtra('cosmos','az')" id="extra-cosmos">🌍 Cosmos DB</div>
+          <div class="extra-chip" onclick="toggleExtra('servicebus','az')" id="extra-servicebus">📨 Service Bus</div>
+          <div class="chip-category">Security & DevOps</div>
+          <div class="extra-chip" onclick="toggleExtra('azrbac','az')" id="extra-azrbac">🛡️ RBAC / Azure AD</div>
+          <div class="extra-chip" onclick="toggleExtra('keyvault','az')" id="extra-keyvault">🔐 Key Vault</div>
+          <div class="extra-chip" onclick="toggleExtra('acr','az')" id="extra-acr">📦 Azure Container Registry</div>
+          <div class="extra-chip" onclick="toggleExtra('azdevops','az')" id="extra-azdevops">🔨 Azure DevOps</div>
+          <div class="extra-chip" onclick="toggleExtra('azmonitor','az')" id="extra-azmonitor">📊 Azure Monitor</div>
+        </div>
+
+        <!-- Cloudflare Add-ons -->
+        <div id="extras-cf" class="extra-grid" style="display:none;">
+          <div class="chip-category">Edge & Delivery</div>
+          <div class="extra-chip" onclick="toggleExtra('cfdns','cf')" id="extra-cfdns">🌍 Cloudflare DNS</div>
+          <div class="extra-chip" onclick="toggleExtra('cfcdn','cf')" id="extra-cfcdn">⚡ CDN + Cache Rules</div>
+          <div class="extra-chip" onclick="toggleExtra('cflb','cf')" id="extra-cflb">🚦 Load Balancing</div>
+          <div class="chip-category">Security</div>
+          <div class="extra-chip" onclick="toggleExtra('cfwaf','cf')" id="extra-cfwaf">🛡️ WAF + Security Rules</div>
+          <div class="extra-chip" onclick="toggleExtra('cftunnel','cf')" id="extra-cftunnel">🔌 Tunnel</div>
+          <div class="extra-chip" onclick="toggleExtra('cfaccess','cf')" id="extra-cfaccess">🔐 Zero Trust Access</div>
+          <div class="chip-category">Data</div>
+          <div class="extra-chip" onclick="toggleExtra('r2','cf')" id="extra-r2">🗂️ R2 Storage</div>
+          <div class="extra-chip" onclick="toggleExtra('d1','cf')" id="extra-d1">🗄️ D1 Database</div>
+          <div class="extra-chip" onclick="toggleExtra('cfkv','cf')" id="extra-cfkv">📦 Workers KV</div>
+        </div>
+      </div>
+
+      <div class="generate-row">
+        <div class="selection-summary" id="selection-summary">No service selected yet.</div>
+        <button class="btn btn-gcp" id="gen-btn" onclick="generateChecklist()">⚡ Generate Checklist</button>
+      </div>
+    </div>
+
+    <!-- CHECKLIST OUTPUT -->
+    <div class="checklist-area" id="checklist-area">
+      <div class="overall-progress">
+        <div class="overall-pct gcp" id="overall-pct">0%</div>
+        <div class="overall-bar-wrap">
+          <div class="overall-bar-label"><span>Overall Deployment Progress</span><span id="overall-count">0 / 0 steps</span></div>
+          <div class="overall-bar"><div class="overall-bar-fill gcp" id="overall-fill"></div></div>
+        </div>
+        <button class="reset-btn" onclick="resetChecklist()">↺ Reset</button>
+      </div>
+      <div id="checklist-blocks"></div>
+    </div>
+
+  </div>
+</div><!-- /page-checklist -->
+
+<script>
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let currentCloud = 'gcp';
+let selectedService = null;
+let selectedExtras = new Set();
+
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => { l.classList.remove('active','aws-active','az-active','cf-active'); });
+  document.getElementById('page-'+name).classList.add('active');
+  const nb = document.getElementById('nav-'+name);
+  nb.classList.add('active');
+  if(currentCloud==='aws') nb.classList.add('aws-active');
+  if(currentCloud==='az')  nb.classList.add('az-active');
+  if(currentCloud==='cf')  nb.classList.add('cf-active');
+  window.scrollTo(0,0);
+}
+
+function openCloud(cloud) {
+  currentCloud = cloud;
+  showPage('checklist');
+  switchChecklistCloud(cloud);
+}
+
+// ══════════════════════════════════════════
+// REFERENCE CLOUD SWITCHER
+// ══════════════════════════════════════════
+function switchRefCloud(cloud) {
+  ['gcp','aws','az','cf'].forEach(c => {
+    document.getElementById('ref-'+c).style.display = (c===cloud)?'block':'none';
+    const tab = document.getElementById('reftab-'+c);
+    tab.classList.remove('active','gcp','aws','az','cf');
+    if(c===cloud) { tab.classList.add('active',c); }
+  });
+  const titles = {gcp:'☁️ GCP Reference Guide',aws:'🟠 AWS Reference Guide',az:'🔷 Azure Reference Guide',cf:'🟡 Cloudflare Reference Guide'};
+  const subs   = {gcp:'Deployment flows, commands, services and troubleshooting for Google Cloud Platform.',aws:'Deployment flows, commands, services and troubleshooting for Amazon Web Services.',az:'Deployment flows, commands, services and troubleshooting for Microsoft Azure.',cf:'Deployment flows, services and troubleshooting for Cloudflare edge network.'};
+  document.getElementById('ref-title').textContent = titles[cloud];
+  document.getElementById('ref-subtitle').textContent = subs[cloud];
+  currentCloud = cloud;
+}
+
+// ══════════════════════════════════════════
+// CHECKLIST CLOUD SWITCHER
+// ══════════════════════════════════════════
+function switchChecklistCloud(cloud) {
+  currentCloud = cloud;
+  selectedService = null;
+  selectedExtras = new Set();
+
+  // tabs
+  ['gcp','aws','az','cf'].forEach(c => {
+    const tab = document.getElementById('cltab-'+c);
+    tab.classList.remove('active','gcp','aws','az','cf');
+    if(c===cloud) tab.classList.add('active',c);
+  });
+
+  // primary grids
+  ['gcp','aws','az','cf'].forEach(c => {
+    document.getElementById('primary-'+c).style.display = (c===cloud)?'grid':'none';
+    document.getElementById('extras-'+c).style.display  = (c===cloud)?'flex':'none';
+  });
+
+  // deselect all options
+  document.querySelectorAll('.service-option').forEach(el => el.classList.remove('selected','gcp','aws','az','cf'));
+  document.querySelectorAll('.extra-chip').forEach(el => el.classList.remove('selected','gcp','aws','az','cf'));
+
+  // update generate button color
+  const btn = document.getElementById('gen-btn');
+  btn.className = 'btn btn-'+cloud;
+
+  // update titles
+  const names = {gcp:'GCP',aws:'AWS',az:'Azure',cf:'Cloudflare'};
+  document.getElementById('cl-selector-title').textContent = `Step 1 — Select ${names[cloud]} deployment target`;
+
+  // update progress colors
+  document.getElementById('overall-pct').className = 'overall-pct '+cloud;
+  document.getElementById('overall-fill').className = 'overall-bar-fill '+cloud;
+
+  updateSummary();
+  document.getElementById('checklist-area').classList.remove('visible');
+}
+
+// ══════════════════════════════════════════
+// SERVICE SELECTION
+// ══════════════════════════════════════════
+function selectService(id, cloud) {
+  selectedService = id;
+  document.querySelectorAll('.service-option').forEach(el => el.classList.remove('selected','gcp','aws','az','cf'));
+  const el = document.getElementById('svc-'+id);
+  el.classList.add('selected', cloud);
+  updateSummary();
+}
+
+function toggleExtra(id, cloud) {
+  const el = document.getElementById('extra-'+id);
+  if(selectedExtras.has(id)) {
+    selectedExtras.delete(id);
+    el.classList.remove('selected','gcp','aws','az','cf');
+  } else {
+    selectedExtras.add(id);
+    el.classList.add('selected', cloud);
+  }
+  updateSummary();
+}
+
+function updateSummary() {
+  const names = {
+    // GCP
+    gce:'GCE VM',cloudrun:'Cloud Run',gke:'GKE',gae:'App Engine',gcf:'Cloud Functions',
+    vpc:'VPC',vpcconn:'VPC Connector',alb:'App LB',firewall:'Firewall',nat:'Cloud NAT',dns:'Cloud DNS',
+    cloudsql:'Cloud SQL',gcs:'Cloud Storage',pubsub:'Pub/Sub',memstore:'Memorystore',
+    iam:'IAM',secrets:'Secret Manager',registry:'Artifact Registry',cicd:'Cloud Build',
+    armor:'Cloud Armor',cdn:'Cloud CDN',monitoring:'Monitoring',endpoints:'Endpoints',
+    // AWS
+    ec2:'EC2',lambda:'Lambda',ecs:'ECS+Fargate',eks:'EKS',beanstalk:'Elastic Beanstalk',
+    awsvpc:'VPC','alb_aws':'ALB/NLB',route53:'Route 53',cloudfront:'CloudFront',
+    s3:'S3',rds:'RDS',dynamodb:'DynamoDB',elasticache:'ElastiCache',sqs:'SQS',sns:'SNS',
+    awsiam:'IAM',awssecrets:'Secrets Manager',ecr:'ECR',codepipeline:'CodePipeline',
+    'waf_aws':'AWS WAF',cloudwatch:'CloudWatch',
+    // Azure
+    azvm:'Azure VM',appsvc:'App Service',aks:'AKS',azfn:'Functions',contapps:'Container Apps',
+    azvnet:'VNet',azlb:'LB/App Gateway',azdns:'Azure DNS',azcdn:'CDN/Front Door',
+    azblob:'Blob Storage',azsql:'Azure SQL',cosmos:'Cosmos DB',servicebus:'Service Bus',
+    azrbac:'RBAC/AD',keyvault:'Key Vault',acr:'ACR',azdevops:'Azure DevOps',azmonitor:'Monitor',
+    // Cloudflare
+    workers:'Workers',pages:'Pages',tunnel:'Tunnel',
+    cfdns:'CF DNS',cfcdn:'CDN',cflb:'Load Balancing',cfwaf:'WAF',
+    cftunnel:'Tunnel',cfaccess:'Zero Trust',r2:'R2',d1:'D1',cfkv:'KV',
+  };
+  const s = document.getElementById('selection-summary');
+  if(!selectedService){ s.innerHTML='No service selected yet.'; return; }
+  const n = names[selectedService] || selectedService;
+  let txt = `Target: <span class="${currentCloud}">${n}</span>`;
+  if(selectedExtras.size>0) txt += ` + ${[...selectedExtras].map(e=>names[e]||e).join(', ')}`;
+  s.innerHTML = txt;
+}
+
+// ══════════════════════════════════════════
+// CHECKLIST DATA
+// ══════════════════════════════════════════
+const CHECKLISTS = {
+
+  // ─────── GCP ───────
+  preflight_gcp: { title:'GCP Pre-Flight', icon:'🛫', provider:'gcp', subtitle:'Required before any GCP deployment', items:[
+    {n:'Install gcloud CLI', c:'curl https://sdk.cloud.google.com | bash', w:'Core tool for all GCP ops', r:true},
+    {n:'Authenticate', c:'gcloud auth login', w:'Verify identity with GCP', r:true},
+    {n:'Set project', c:'gcloud config set project PROJECT_ID', w:'Target the right project', r:true},
+    {n:'Set region', c:'gcloud config set compute/region us-central1', w:'Default region for resources', r:true},
+    {n:'Enable APIs', c:'gcloud services enable compute.googleapis.com container.googleapis.com run.googleapis.com', w:'APIs must be enabled before use', r:true},
+    {n:'Verify IAM permissions', c:'gcloud projects get-iam-policy PROJECT_ID', w:'Confirm you have required roles', r:true},
+    {n:'App-default auth (for SDKs)', c:'gcloud auth application-default login', w:'Auth for local SDK calls', r:false},
+  ]},
+  gce: { title:'GCE VM Instance', icon:'🖥️', provider:'gcp', subtitle:'Deploy app to a Virtual Machine', items:[
+    {n:'Prepare app code', c:'git status / zip -r app.zip .', w:'Package app for transfer', r:true},
+    {n:'Create VM instance', c:'gcloud compute instances create my-vm --machine-type=e2-medium --image-family=debian-11 --image-project=debian-cloud --zone=us-central1-a', w:'Provision the virtual machine', r:true},
+    {n:'Create firewall rule (HTTP)', c:'gcloud compute firewall-rules create allow-http --allow tcp:80,tcp:443 --target-tags=http-server', w:'Open required ports', r:true},
+    {n:'Add network tag to VM', c:'gcloud compute instances add-tags my-vm --tags=http-server', w:'Apply firewall rule to this VM', r:true},
+    {n:'SSH into VM', c:'gcloud compute ssh my-vm --zone=us-central1-a', w:'Connect to VM terminal', r:true},
+    {n:'Install runtime', c:'sudo apt update && sudo apt install -y nodejs npm', w:'Install language runtime on VM', r:true},
+    {n:'Copy app files', c:'gcloud compute scp ./app.tar.gz my-vm:~/ --zone=us-central1-a', w:'Transfer code to VM', r:true},
+    {n:'Install dependencies', c:'tar -xzf app.tar.gz && npm install', w:'Set up app dependencies', r:true},
+    {n:'Configure systemd service', c:'sudo nano /etc/systemd/system/myapp.service', w:'Run app persistently on reboot', r:false},
+    {n:'Start & enable service', c:'sudo systemctl start myapp && sudo systemctl enable myapp', w:'Start app and auto-start on boot', r:true},
+    {n:'Verify app is running', c:'curl http://EXTERNAL_IP:PORT', w:'Confirm app responds on port', r:true},
+    {n:'Reserve static IP (optional)', c:'gcloud compute addresses create my-ip --region=us-central1', w:'Prevent IP changing on restart', r:false},
+  ]},
+  cloudrun: { title:'Cloud Run', icon:'🚀', provider:'gcp', subtitle:'Serverless container deployment', items:[
+    {n:'Write Dockerfile', c:'FROM node:18-alpine\nCOPY . .\nCMD ["node","index.js"]', w:'Define container image', r:true},
+    {n:'App must listen on $PORT', c:'const port = process.env.PORT || 8080', w:'Cloud Run injects PORT — default 8080', r:true},
+    {n:'Configure Docker for GCR', c:'gcloud auth configure-docker', w:'Allow docker to push to Container Registry', r:true},
+    {n:'Build & push via Cloud Build', c:'gcloud builds submit --tag gcr.io/PROJECT_ID/myapp:v1', w:'Build in cloud, push to registry', r:true},
+    {n:'Deploy to Cloud Run', c:'gcloud run deploy myapp --image gcr.io/PROJECT_ID/myapp:v1 --platform managed --region us-central1 --allow-unauthenticated', w:'Deploy as serverless service', r:true},
+    {n:'Set environment variables', c:'gcloud run services update myapp --set-env-vars KEY=VALUE', w:'Inject config without rebuild', r:false},
+    {n:'Configure min instances', c:'gcloud run services update myapp --min-instances=1', w:'Keep warm — avoid cold starts', r:false},
+    {n:'Verify service URL', c:'gcloud run services describe myapp --region us-central1', w:'Get service URL, confirm running', r:true},
+    {n:'Test endpoint', c:'curl https://SERVICE_URL', w:'Confirm app responds', r:true},
+    {n:'Check logs', c:'gcloud run services logs read myapp --region us-central1', w:'Verify no errors', r:true},
+  ]},
+  gke: { title:'GKE Kubernetes', icon:'☸️', provider:'gcp', subtitle:'Multi-container microservices on K8s', items:[
+    {n:'Write Dockerfile per service', c:'# One Dockerfile per microservice', w:'Each service runs in its own container', r:true},
+    {n:'Configure Docker auth', c:'gcloud auth configure-docker', w:'Allow pushing to Artifact Registry', r:true},
+    {n:'Build & push each image', c:'docker build -t gcr.io/PROJECT/service:v1 . && docker push gcr.io/PROJECT/service:v1', w:'Push all service images to registry', r:true},
+    {n:'Create GKE cluster', c:'gcloud container clusters create my-cluster --num-nodes=3 --zone=us-central1-a', w:'Provision the K8s cluster', r:true},
+    {n:'Get cluster credentials', c:'gcloud container clusters get-credentials my-cluster --zone=us-central1-a', w:'Configure kubectl for this cluster', r:true},
+    {n:'Verify kubectl connection', c:'kubectl cluster-info && kubectl get nodes', w:'Confirm nodes are Ready', r:true},
+    {n:'Write deployment.yaml', c:'kind: Deployment — spec.containers[] with images', w:'Define pod specs and container images', r:true},
+    {n:'Write service.yaml', c:'kind: Service, type: LoadBalancer, port: 80', w:'Expose app via load balancer', r:true},
+    {n:'Write configmap.yaml', c:'kind: ConfigMap, data: {DB_HOST: "postgres-svc"}', w:'Non-secret config injection', r:false},
+    {n:'Write secret.yaml', c:'kind: Secret, data: {DB_PASS: base64value}', w:'Inject credentials securely', r:false},
+    {n:'Apply all manifests', c:'kubectl apply -f k8s/', w:'Deploy all K8s resources', r:true},
+    {n:'Check pods are Running', c:'kubectl get pods -w', w:'All pods must reach Running state', r:true},
+    {n:'Get external IP', c:'kubectl get services', w:'Get LoadBalancer external IP', r:true},
+    {n:'Test application', c:'curl http://EXTERNAL_IP', w:'Confirm app is reachable', r:true},
+    {n:'Set up HPA autoscaling', c:'kubectl autoscale deployment myapp --cpu-percent=70 --min=2 --max=10', w:'Auto-scale pods on CPU load', r:false},
+  ]},
+  gae: { title:'App Engine', icon:'⚙️', provider:'gcp', subtitle:'PaaS — no Docker needed', items:[
+    {n:'Create app.yaml', c:'runtime: python310\nenv: standard', w:'Defines runtime, scaling for App Engine', r:true},
+    {n:'Define entrypoint', c:'entrypoint: gunicorn -b :$PORT main:app', w:'Tell App Engine how to start your app', r:true},
+    {n:'Create requirements.txt', c:'pip freeze > requirements.txt', w:'Dependencies for App Engine to install', r:true},
+    {n:'Initialize App Engine', c:'gcloud app create --region=us-central', w:'One-time project setup', r:true},
+    {n:'Deploy', c:'gcloud app deploy', w:'Build, package and deploy', r:true},
+    {n:'Open app', c:'gcloud app browse', w:'Verify app is live', r:true},
+    {n:'Check logs', c:'gcloud app logs tail -s default', w:'Monitor errors after deploy', r:true},
+  ]},
+  gcf: { title:'Cloud Functions', icon:'⚡', provider:'gcp', subtitle:'Event-driven serverless', items:[
+    {n:'Write function code', c:'def handler(request): return "Hello!"', w:'Single function file', r:true},
+    {n:'Create requirements.txt', c:'functions-framework==3.*', w:'Runtime dependencies', r:true},
+    {n:'Deploy HTTP function', c:'gcloud functions deploy myFunc --runtime python310 --trigger-http --allow-unauthenticated --region us-central1', w:'Deploy with HTTP trigger', r:true},
+    {n:'Test function', c:'gcloud functions call myFunc\nOR curl TRIGGER_URL', w:'Verify execution and output', r:true},
+    {n:'Check logs', c:'gcloud functions logs read myFunc', w:'Inspect execution logs', r:true},
+    {n:'Deploy Pub/Sub function', c:'gcloud functions deploy myFunc --trigger-topic my-topic', w:'Trigger from Pub/Sub messages', r:false},
+    {n:'Set env vars', c:'gcloud functions deploy myFunc --set-env-vars KEY=VALUE', w:'Inject config', r:false},
+  ]},
+  vpc: { title:'VPC Network', icon:'🌐', provider:'gcp', subtitle:'Private network foundation', items:[
+    {n:'Enable Compute API', c:'gcloud services enable compute.googleapis.com', w:'Required for networking ops', r:true},
+    {n:'Create custom VPC', c:'gcloud compute networks create my-vpc --subnet-mode=custom', w:'Custom mode = full control over subnets', r:true},
+    {n:'Create subnet', c:'gcloud compute networks subnets create my-subnet --network=my-vpc --region=us-central1 --range=10.0.0.0/24', w:'Defines IP range for resources in a region', r:true},
+    {n:'Enable Private Google Access', c:'gcloud compute networks subnets update my-subnet --region=us-central1 --enable-private-ip-google-access', w:'VMs without public IPs can reach Google APIs', r:false},
+    {n:'Verify VPC & subnets', c:'gcloud compute networks list && gcloud compute networks subnets list', w:'Confirm network created correctly', r:true},
+    {n:'Set up VPC Peering (if needed)', c:'gcloud compute networks peerings create peer1 --network=my-vpc --peer-project=P2 --peer-network=vpc2', w:'Connect two VPCs privately', r:false},
+  ]},
+  vpcconn: { title:'Serverless VPC Connector', icon:'🔌', provider:'gcp', subtitle:'Bridge Cloud Run/Functions → VPC', items:[
+    {n:'Enable VPC Access API', c:'gcloud services enable vpcaccess.googleapis.com', w:'Required for VPC Connectors', r:true},
+    {n:'Create connector', c:'gcloud compute networks vpc-access connectors create my-connector --region=us-central1 --network=my-vpc --range=10.8.0.0/28', w:'Pick unused /28 not overlapping subnets', r:true},
+    {n:'Verify connector is READY', c:'gcloud compute networks vpc-access connectors describe my-connector --region=us-central1', w:'Must be in READY state before use', r:true},
+    {n:'Attach to Cloud Run', c:'gcloud run deploy myapp --vpc-connector=my-connector --vpc-egress=all-traffic', w:'Route Cloud Run traffic through VPC', r:true},
+    {n:'Attach to Cloud Function', c:'gcloud functions deploy myFunc --vpc-connector=my-connector', w:'Function can reach private VPC resources', r:false},
+    {n:'Test private connectivity', c:'curl http://PRIVATE_IP', w:'Confirm serverless can reach VPC', r:true},
+  ]},
+  alb: { title:'Application Load Balancer', icon:'🚦', provider:'gcp', subtitle:'Layer 7 HTTP/S load balancing', items:[
+    {n:'Reserve global static IP', c:'gcloud compute addresses create my-alb-ip --global --ip-version=IPV4', w:'ALB needs fixed global IP', r:true},
+    {n:'Create health check', c:'gcloud compute health-checks create http my-hc --port=80 --request-path=/healthz', w:'ALB routes only to healthy backends', r:true},
+    {n:'Create Serverless NEG', c:'gcloud compute network-endpoint-groups create my-neg --region=us-central1 --network-endpoint-type=serverless --cloud-run-service=myapp', w:'Connects ALB directly to Cloud Run', r:true},
+    {n:'Create backend service', c:'gcloud compute backend-services create my-backend --protocol=HTTP --global --health-checks=my-hc', w:'Define backend pool', r:true},
+    {n:'Add NEG to backend', c:'gcloud compute backend-services add-backend my-backend --global --network-endpoint-group=my-neg --network-endpoint-group-region=us-central1', w:'Attach Cloud Run as ALB backend', r:true},
+    {n:'Create URL map', c:'gcloud compute url-maps create my-url-map --default-service=my-backend', w:'Path routing rules', r:true},
+    {n:'Create managed SSL cert', c:'gcloud compute ssl-certificates create my-cert --domains=mydomain.com', w:'Google-managed cert, auto-renews', r:false},
+    {n:'Create HTTPS proxy', c:'gcloud compute target-https-proxies create my-proxy --url-map=my-url-map --ssl-certificates=my-cert', w:'Terminates SSL at ALB', r:true},
+    {n:'Create forwarding rule', c:'gcloud compute forwarding-rules create my-rule --address=my-alb-ip --global --target-https-proxy=my-proxy --ports=443', w:'Route HTTPS traffic to proxy', r:true},
+    {n:'Map DNS to ALB IP', c:'gcloud dns record-sets create mydomain.com. --zone=my-zone --type=A --ttl=300 --rrdatas=ALB_IP', w:'Point domain at ALB', r:true},
+    {n:'Test ALB', c:'curl -I https://mydomain.com', w:'Confirm SSL, routing, backend all working', r:true},
+  ]},
+  firewall: { title:'Firewall Rules', icon:'🔥', provider:'gcp', subtitle:'Control ingress/egress to VMs', items:[
+    {n:'List existing rules', c:'gcloud compute firewall-rules list', w:'Understand current allow/deny rules', r:true},
+    {n:'Allow HTTP (port 80)', c:'gcloud compute firewall-rules create allow-http --network=my-vpc --allow=tcp:80 --target-tags=http-server', w:'Web traffic to tagged VMs', r:true},
+    {n:'Allow HTTPS (port 443)', c:'gcloud compute firewall-rules create allow-https --network=my-vpc --allow=tcp:443 --target-tags=https-server', w:'Secure web traffic', r:true},
+    {n:'Restrict SSH to your IP only', c:'gcloud compute firewall-rules create allow-ssh --allow=tcp:22 --source-ranges=YOUR_IP/32', w:'NEVER allow 0.0.0.0/0 for SSH', r:true},
+    {n:'Allow internal VPC traffic', c:'gcloud compute firewall-rules create allow-internal --allow=tcp,udp,icmp --source-ranges=10.0.0.0/8', w:'Services communicate freely within VPC', r:false},
+    {n:'Add network tag to VM', c:'gcloud compute instances add-tags my-vm --tags=http-server,https-server', w:'Firewall rules match VMs via tags', r:true},
+    {n:'Test with connectivity test', c:'VPC Network → Connectivity Tests → Run Test', w:'Simulate and verify network paths', r:false},
+  ]},
+  nat: { title:'Cloud NAT', icon:'🔄', provider:'gcp', subtitle:'Outbound internet for private VMs', items:[
+    {n:'Create Cloud Router', c:'gcloud compute routers create my-router --network=my-vpc --region=us-central1', w:'NAT requires a Cloud Router', r:true},
+    {n:'Create NAT gateway', c:'gcloud compute routers nats create my-nat --router=my-router --region=us-central1 --auto-allocate-nat-external-ips --nat-all-subnet-ip-ranges', w:'Enables private VMs to reach internet', r:true},
+    {n:'Verify NAT active', c:'gcloud compute routers nats describe my-nat --router=my-router --region=us-central1', w:'Confirm NAT is running', r:true},
+    {n:'Test from private VM', c:'gcloud compute ssh private-vm -- curl -s https://api.ipify.org', w:'Confirm private VM reaches internet via NAT', r:true},
+  ]},
+  dns: { title:'Cloud DNS', icon:'🌍', provider:'gcp', subtitle:'Managed DNS for your domain', items:[
+    {n:'Enable Cloud DNS API', c:'gcloud services enable dns.googleapis.com', w:'Activate Cloud DNS', r:true},
+    {n:'Create managed zone', c:'gcloud dns managed-zones create my-zone --dns-name=mydomain.com. --description="My zone"', w:'Zone holds DNS records for domain', r:true},
+    {n:'Get nameservers', c:'gcloud dns managed-zones describe my-zone --format="value(nameServers)"', w:'Copy NS records to your registrar', r:true},
+    {n:'Update NS at registrar', c:'Go to registrar → set NS records to GCP nameservers', w:'Without this, DNS zone is not active', r:true},
+    {n:'Create A record', c:'gcloud dns record-sets create mydomain.com. --zone=my-zone --type=A --ttl=300 --rrdatas=EXTERNAL_IP', w:'Map domain to IP', r:true},
+    {n:'Verify propagation', c:'nslookup mydomain.com 8.8.8.8', w:'Confirm DNS has propagated globally', r:true},
+  ]},
+  cloudsql: { title:'Cloud SQL', icon:'🗄️', provider:'gcp', subtitle:'Managed relational database', items:[
+    {n:'Create SQL instance', c:'gcloud sql instances create my-db --database-version=POSTGRES_14 --tier=db-f1-micro --region=us-central1', w:'Provision managed PostgreSQL/MySQL', r:true},
+    {n:'Set root password', c:'gcloud sql users set-password root --instance=my-db --password=SECURE_PASS', w:'Secure root account', r:true},
+    {n:'Create application DB', c:'gcloud sql databases create myapp_db --instance=my-db', w:'Create DB for your application', r:true},
+    {n:'Create app DB user', c:'gcloud sql users create appuser --instance=my-db --password=APP_PASS', w:'Least-privilege user for app', r:true},
+    {n:'Store credentials in Secret Manager', c:'echo -n "postgresql://user:pass@/db?..." | gcloud secrets create DB_URL --data-file=-', w:'Never hardcode DB credentials', r:true},
+    {n:'Connect via Auth Proxy (local)', c:'cloud-sql-proxy PROJECT:REGION:INSTANCE', w:'Secure local-to-cloud DB connection', r:false},
+  ]},
+  gcs: { title:'Cloud Storage', icon:'🗂️', provider:'gcp', subtitle:'Object/file storage bucket', items:[
+    {n:'Create bucket', c:'gsutil mb -l us-central1 gs://my-unique-bucket', w:'Create GCS bucket', r:true},
+    {n:'Upload files', c:'gsutil cp ./file.txt gs://my-bucket/', w:'Transfer files to cloud storage', r:true},
+    {n:'Grant SA access', c:'gsutil iam ch serviceAccount:SA@PROJECT.iam.gserviceaccount.com:roles/storage.objectViewer gs://my-bucket', w:'Allow app to access bucket', r:true},
+    {n:'Make bucket public (static)', c:'gsutil iam ch allUsers:objectViewer gs://my-bucket', w:'Serve static files publicly', r:false},
+    {n:'Set lifecycle policy', c:'gsutil lifecycle set lifecycle.json gs://my-bucket', w:'Auto-delete old files', r:false},
+  ]},
+  pubsub: { title:'Pub/Sub', icon:'📨', provider:'gcp', subtitle:'Async messaging between services', items:[
+    {n:'Enable Pub/Sub API', c:'gcloud services enable pubsub.googleapis.com', w:'Activate Pub/Sub', r:true},
+    {n:'Create topic', c:'gcloud pubsub topics create my-topic', w:'Define the message channel', r:true},
+    {n:'Create subscription', c:'gcloud pubsub subscriptions create my-sub --topic=my-topic', w:'Subscribe a service to the topic', r:true},
+    {n:'Grant publisher role to SA', c:'gcloud pubsub topics add-iam-policy-binding my-topic --member=SA --role=roles/pubsub.publisher', w:'Allow app SA to publish', r:true},
+    {n:'Test publish message', c:'gcloud pubsub topics publish my-topic --message="test"', w:'Verify topic is working', r:true},
+  ]},
+  memstore: { title:'Memorystore (Redis)', icon:'⚡', provider:'gcp', subtitle:'Managed Redis in-memory cache', items:[
+    {n:'Enable Memorystore API', c:'gcloud services enable redis.googleapis.com', w:'Activate Memorystore', r:true},
+    {n:'Create Redis instance', c:'gcloud redis instances create my-redis --size=1 --region=us-central1 --redis-version=redis_6_x', w:'Provision managed Redis', r:true},
+    {n:'Get Redis IP', c:'gcloud redis instances describe my-redis --region=us-central1 --format="get(host)"', w:'Get private IP to connect from app', r:true},
+    {n:'Connect app via VPC', c:'# App must be in same VPC as Redis instance', w:'Memorystore is private-only — requires VPC Connector for serverless', r:true},
+  ]},
+  iam: { title:'IAM & Admin', icon:'🛡️', provider:'gcp', subtitle:'Identity, access control, service accounts', items:[
+    {n:'Check current IAM policy', c:'gcloud projects get-iam-policy PROJECT_ID', w:'Understand current role assignments', r:true},
+    {n:'Create Service Account', c:'gcloud iam service-accounts create my-app-sa --display-name="My App SA"', w:'Apps use SA, not personal credentials', r:true},
+    {n:'Grant SA required role', c:'gcloud projects add-iam-policy-binding PROJECT_ID --member=serviceAccount:my-app-sa@PROJECT.iam.gserviceaccount.com --role=roles/run.invoker', w:'Assign only exact permissions needed', r:true},
+    {n:'Attach SA to GCE VM', c:'gcloud compute instances create my-vm --service-account=my-app-sa@PROJECT.iam.gserviceaccount.com --scopes=cloud-platform', w:'VM uses this SA for all GCP calls', r:false},
+    {n:'Enable Workload Identity (GKE)', c:'gcloud container clusters update my-cluster --workload-pool=PROJECT.svc.id.goog', w:'K8s SA maps to GCP SA — no key files', r:false},
+    {n:'Audit Owner/Editor roles', c:'gcloud projects get-iam-policy PROJECT_ID --format=json | python3 -m json.tool', w:'Remove broad roles — least privilege always', r:true},
+    {n:'List all service accounts', c:'gcloud iam service-accounts list', w:'Inventory SAs for unused/over-privileged', r:false},
+  ]},
+  secrets: { title:'Secret Manager', icon:'🔐', provider:'gcp', subtitle:'Secure credential storage', items:[
+    {n:'Enable Secret Manager API', c:'gcloud services enable secretmanager.googleapis.com', w:'Activate Secret Manager', r:true},
+    {n:'Create a secret', c:'echo -n "my-value" | gcloud secrets create my-secret --data-file=-', w:'Store sensitive config securely', r:true},
+    {n:'Grant SA access to secret', c:'gcloud secrets add-iam-policy-binding my-secret --member=serviceAccount:SA@PROJECT.iam.gserviceaccount.com --role=roles/secretmanager.secretAccessor', w:'Allow app SA to read this secret', r:true},
+    {n:'Reference in Cloud Run', c:'gcloud run deploy --set-secrets ENV_VAR=my-secret:latest', w:'Inject secret as env variable', r:false},
+    {n:'Reference in K8s', c:'kubectl create secret generic db-secret --from-literal=password=VALUE', w:'Inject into Kubernetes pods', r:false},
+  ]},
+  registry: { title:'Artifact Registry', icon:'📦', provider:'gcp', subtitle:'Private Docker image storage', items:[
+    {n:'Enable Artifact Registry API', c:'gcloud services enable artifactregistry.googleapis.com', w:'Activate Artifact Registry', r:true},
+    {n:'Create Docker repository', c:'gcloud artifacts repositories create my-repo --repository-format=docker --location=us-central1', w:'Named registry for your images', r:true},
+    {n:'Configure Docker auth', c:'gcloud auth configure-docker us-central1-docker.pkg.dev', w:'Allow docker to push to registry', r:true},
+    {n:'Tag image for registry', c:'docker tag myapp us-central1-docker.pkg.dev/PROJECT/my-repo/myapp:v1', w:'Use full registry path', r:true},
+    {n:'Push image', c:'docker push us-central1-docker.pkg.dev/PROJECT/my-repo/myapp:v1', w:'Upload to private registry', r:true},
+    {n:'Verify image in registry', c:'gcloud artifacts docker images list us-central1-docker.pkg.dev/PROJECT/my-repo', w:'Confirm push succeeded', r:true},
+  ]},
+  cicd: { title:'Cloud Build (CI/CD)', icon:'🔨', provider:'gcp', subtitle:'Auto build & deploy on push', items:[
+    {n:'Create cloudbuild.yaml', c:'steps: [{name: "gcr.io/cloud-builders/docker", args: ["build", "-t", "IMAGE", "."]}]', w:'Define build pipeline steps', r:true},
+    {n:'Grant Cloud Build IAM roles', c:'gcloud projects add-iam-policy-binding PROJECT --member=serviceAccount:CBSA --role=roles/run.admin', w:'Allow Cloud Build to deploy', r:true},
+    {n:'Connect repo to Cloud Build', c:'Cloud Build → Triggers → Connect Repository', w:'Link GitHub/GitLab/Bitbucket', r:true},
+    {n:'Create build trigger', c:'gcloud builds triggers create github --repo-name=REPO --branch-pattern=main --build-config=cloudbuild.yaml', w:'Auto-trigger on push to branch', r:true},
+    {n:'Push to trigger build', c:'git push origin main', w:'Trigger CI/CD pipeline', r:true},
+    {n:'Monitor build', c:'gcloud builds list', w:'Check build status and logs', r:true},
+  ]},
+  armor: { title:'Cloud Armor (WAF)', icon:'🛡️', provider:'gcp', subtitle:'DDoS protection & WAF rules', items:[
+    {n:'Create security policy', c:'gcloud compute security-policies create my-armor-policy --description="WAF"', w:'Container for all WAF rules', r:true},
+    {n:'Add IP denylist rule', c:'gcloud compute security-policies rules create 900 --security-policy=my-armor-policy --src-ip-ranges=MALICIOUS_IP/32 --action=deny-403', w:'Block known malicious IPs', r:false},
+    {n:'Enable OWASP SQLi protection', c:'gcloud compute security-policies rules create 2000 --security-policy=my-armor-policy --expression="evaluatePreconfiguredExpr(\\"sqli-v33-stable\\")" --action=deny-403', w:'Block SQL injection attacks', r:true},
+    {n:'Add rate limiting', c:'--action=rate-based-ban --rate-limit-threshold-count=100 --rate-limit-threshold-interval-sec=60', w:'Limit requests per IP', r:false},
+    {n:'Attach to backend service', c:'gcloud compute backend-services update my-backend --security-policy=my-armor-policy --global', w:'Apply WAF to ALB backend', r:true},
+    {n:'Verify policy active', c:'gcloud compute security-policies describe my-armor-policy', w:'Confirm rules and attachment', r:true},
+  ]},
+  cdn: { title:'Cloud CDN', icon:'⚡', provider:'gcp', subtitle:'Cache at Google edge globally', items:[
+    {n:'Ensure ALB backend exists', c:'# CDN requires HTTPS ALB backend service', w:'CDN only works with HTTP(S) LB', r:true},
+    {n:'Enable CDN on backend', c:'gcloud compute backend-services update my-backend --enable-cdn --global', w:'Cache content at edge PoPs', r:true},
+    {n:'Set cache mode', c:'gcloud compute backend-services update my-backend --cache-mode=CACHE_ALL_STATIC --global', w:'Cache all static assets automatically', r:true},
+    {n:'Set default TTL', c:'gcloud compute backend-services update my-backend --default-ttl=3600 --global', w:'Cache duration in seconds', r:false},
+    {n:'Invalidate after deploy', c:'gcloud compute url-maps invalidate-cdn-cache my-url-map --path "/*"', w:'Force-refresh edge caches', r:false},
+    {n:'Verify CDN caching', c:'curl -I https://mydomain.com/static/file.js | grep -i age', w:'Age > 0 = response from CDN cache', r:true},
+  ]},
+  monitoring: { title:'Monitoring & Logging', icon:'📊', provider:'gcp', subtitle:'Observability for your deployment', items:[
+    {n:'Enable Monitoring & Logging APIs', c:'gcloud services enable monitoring.googleapis.com logging.googleapis.com', w:'Activate observability services', r:true},
+    {n:'View logs', c:'gcloud logging read "resource.type=cloud_run_revision" --limit=50', w:'Check application logs', r:true},
+    {n:'Create log-based metric', c:'gcloud logging metrics create error-count --log-filter="severity=ERROR"', w:'Track error rates over time', r:false},
+    {n:'Create alerting policy', c:'Cloud Monitoring → Alerting → Create Policy', w:'Alert when metrics breach threshold', r:true},
+    {n:'Create uptime check', c:'Cloud Monitoring → Uptime Checks → Create', w:'Monitor if service URL is reachable', r:true},
+    {n:'Create dashboard', c:'Cloud Monitoring → Dashboards → Create', w:'Visualize CPU, memory, latency', r:false},
+  ]},
+  endpoints: { title:'Cloud Endpoints', icon:'🔗', provider:'gcp', subtitle:'API gateway with auth & quotas', items:[
+    {n:'Enable Endpoints APIs', c:'gcloud services enable endpoints.googleapis.com servicemanagement.googleapis.com servicecontrol.googleapis.com', w:'Activate Endpoints services', r:true},
+    {n:'Write OpenAPI spec', c:'openapi: "2.0"\nhost: "myapi.appspot.com"\npaths:\n /echo:\n  post: ...', w:'Define API contract', r:true},
+    {n:'Deploy API config', c:'gcloud endpoints services deploy openapi.yaml', w:'Upload spec to Endpoints', r:true},
+    {n:'Note config ID', c:'gcloud endpoints configs list --service=myapi.appspot.com', w:'Needed for ESP container config', r:true},
+    {n:'Add ESP sidecar container', c:'# Add ESP proxy as sidecar in GKE pod or Cloud Run', w:'Validates auth, enforces quotas', r:true},
+    {n:'Test endpoint with API key', c:'curl -X POST https://myapi.appspot.com/echo -H "x-api-key: YOUR_KEY"', w:'Verify Endpoints routing and auth', r:true},
+  ]},
+
+  // ─────── AWS ───────
+  preflight_aws: { title:'AWS Pre-Flight', icon:'🛫', provider:'aws', subtitle:'Required before any AWS deployment', items:[
+    {n:'Install AWS CLI v2', c:'curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o awscliv2.zip && unzip awscliv2.zip && sudo ./aws/install', w:'Core tool for all AWS ops', r:true},
+    {n:'Configure credentials', c:'aws configure', w:'Set Access Key, Secret, Region, Output', r:true},
+    {n:'Verify identity', c:'aws sts get-caller-identity', w:'Confirm who you are authenticated as', r:true},
+    {n:'Check IAM permissions', c:'aws iam get-user', w:'Verify IAM user access', r:true},
+    {n:'Set default region', c:'aws configure set region us-east-1', w:'Default region for all commands', r:true},
+  ]},
+  ec2: { title:'EC2 Instance', icon:'🖥️', provider:'aws', subtitle:'Deploy app to a virtual server', items:[
+    {n:'Create key pair', c:'aws ec2 create-key-pair --key-name my-key --query KeyMaterial --output text > my-key.pem && chmod 400 my-key.pem', w:'SSH access key for this instance', r:true},
+    {n:'Create security group', c:'aws ec2 create-security-group --group-name my-sg --description "App SG" --vpc-id VPC_ID', w:'Firewall rules for EC2', r:true},
+    {n:'Add HTTP inbound rule', c:'aws ec2 authorize-security-group-ingress --group-id SG_ID --protocol tcp --port 80 --cidr 0.0.0.0/0', w:'Allow web traffic', r:true},
+    {n:'Restrict SSH to your IP', c:'aws ec2 authorize-security-group-ingress --group-id SG_ID --protocol tcp --port 22 --cidr YOUR_IP/32', w:'NEVER open SSH to 0.0.0.0/0', r:true},
+    {n:'Launch EC2 instance', c:'aws ec2 run-instances --image-id ami-0abcdef1234567890 --instance-type t3.micro --key-name my-key --security-group-ids SG_ID --subnet-id SUBNET_ID', w:'Provision the virtual server', r:true},
+    {n:'Wait for instance running', c:'aws ec2 wait instance-running --instance-ids INSTANCE_ID', w:'Wait until ready to SSH', r:true},
+    {n:'Get public IP', c:'aws ec2 describe-instances --instance-ids INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text', w:'Get IP to connect to', r:true},
+    {n:'SSH into instance', c:'ssh -i my-key.pem ec2-user@PUBLIC_IP', w:'Connect to instance terminal', r:true},
+    {n:'Install runtime & deploy app', c:'sudo yum update -y && sudo yum install -y nodejs', w:'Install language runtime', r:true},
+    {n:'Run app & set up systemd', c:'sudo systemctl start myapp && sudo systemctl enable myapp', w:'Run app persistently', r:true},
+    {n:'Verify app running', c:'curl http://PUBLIC_IP:PORT', w:'Confirm app responds', r:true},
+  ]},
+  lambda: { title:'AWS Lambda', icon:'⚡', provider:'aws', subtitle:'Serverless event-driven functions', items:[
+    {n:'Create IAM execution role', c:'aws iam create-role --role-name lambda-role --assume-role-policy-document file://trust.json', w:'Lambda needs a role to run with', r:true},
+    {n:'Attach basic execution policy', c:'aws iam attach-role-policy --role-name lambda-role --policy-arn arn:aws:iam::aws:policy/AWSLambdaBasicExecutionRole', w:'Grants CloudWatch logging permission', r:true},
+    {n:'Package function code', c:'zip function.zip index.js node_modules/', w:'Lambda deploys from a zip file', r:true},
+    {n:'Create Lambda function', c:'aws lambda create-function --function-name myFunc --runtime nodejs18.x --role ROLE_ARN --handler index.handler --zip-file fileb://function.zip', w:'Create the Lambda function', r:true},
+    {n:'Test invoke locally', c:'aws lambda invoke --function-name myFunc --payload \'{"key":"val"}\' response.json && cat response.json', w:'Verify function executes correctly', r:true},
+    {n:'Create API Gateway (HTTP trigger)', c:'aws apigateway create-rest-api --name myAPI', w:'Expose Lambda via HTTP URL', r:false},
+    {n:'Stream logs', c:'aws logs tail /aws/lambda/myFunc --follow', w:'Monitor function execution logs', r:true},
+    {n:'Set environment variables', c:'aws lambda update-function-configuration --function-name myFunc --environment Variables={KEY=VALUE}', w:'Inject config into Lambda', r:false},
+  ]},
+  ecs: { title:'ECS + Fargate', icon:'🐳', provider:'aws', subtitle:'Managed Docker containers', items:[
+    {n:'Create ECR repository', c:'aws ecr create-repository --repository-name myapp --region us-east-1', w:'Private Docker registry on AWS', r:true},
+    {n:'Auth Docker to ECR', c:'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ACCOUNT.dkr.ecr.REGION.amazonaws.com', w:'Allow docker to push to ECR', r:true},
+    {n:'Build & push image', c:'docker build -t myapp . && docker tag myapp:latest ACCOUNT.dkr.ecr.REGION.amazonaws.com/myapp:latest && docker push ...', w:'Push image to ECR', r:true},
+    {n:'Create ECS cluster', c:'aws ecs create-cluster --cluster-name my-cluster', w:'Logical grouping of container tasks', r:true},
+    {n:'Create task definition', c:'aws ecs register-task-definition --family my-task --network-mode awsvpc --requires-compatibilities FARGATE --cpu 256 --memory 512 --container-definitions file://containers.json', w:'Define container spec, CPU, memory', r:true},
+    {n:'Create ECS service', c:'aws ecs create-service --cluster my-cluster --service-name my-svc --task-definition my-task --desired-count 2 --launch-type FARGATE --network-configuration "awsvpcConfiguration={subnets=[SUBNET_ID],securityGroups=[SG_ID],assignPublicIp=ENABLED}"', w:'Run and maintain containers', r:true},
+    {n:'Check service status', c:'aws ecs describe-services --cluster my-cluster --services my-svc', w:'Verify tasks are RUNNING', r:true},
+    {n:'View container logs', c:'aws logs tail /ecs/my-task --follow', w:'Stream application logs', r:true},
+  ]},
+  eks: { title:'EKS (Kubernetes)', icon:'☸️', provider:'aws', subtitle:'Managed Kubernetes on AWS', items:[
+    {n:'Install eksctl', c:'curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp && sudo mv /tmp/eksctl /usr/local/bin', w:'CLI tool for EKS management', r:true},
+    {n:'Create EKS cluster', c:'eksctl create cluster --name my-eks --region us-east-1 --nodegroup-name standard --node-type t3.medium --nodes 3', w:'Provision EKS + worker nodes', r:true},
+    {n:'Configure kubectl', c:'aws eks update-kubeconfig --region us-east-1 --name my-eks', w:'Link kubectl to EKS cluster', r:true},
+    {n:'Auth Docker to ECR', c:'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ACCOUNT.dkr.ecr.REGION.amazonaws.com', w:'Allow EKS to pull images', r:true},
+    {n:'Deploy workloads', c:'kubectl apply -f deployment.yaml', w:'Same K8s manifests as GKE', r:true},
+    {n:'Expose via LoadBalancer', c:'kubectl expose deployment myapp --type=LoadBalancer --port=80', w:'AWS creates ALB/NLB automatically', r:true},
+    {n:'Check pods', c:'kubectl get pods && kubectl get services', w:'Verify all pods Running + get LB URL', r:true},
+  ]},
+  beanstalk: { title:'Elastic Beanstalk', icon:'🌿', provider:'aws', subtitle:'PaaS — upload code, AWS handles infra', items:[
+    {n:'Install EB CLI', c:'pip install awsebcli', w:'CLI tool for Beanstalk deployments', r:true},
+    {n:'Initialize EB project', c:'eb init my-app --platform node.js --region us-east-1', w:'Set up EB configuration in project', r:true},
+    {n:'Create environment', c:'eb create my-env --instance-type t3.micro', w:'Provision EC2, LB, Auto Scaling group', r:true},
+    {n:'Deploy application', c:'eb deploy', w:'Upload code, EB handles build & deploy', r:true},
+    {n:'Open app in browser', c:'eb open', w:'Get URL and verify app is live', r:true},
+    {n:'View logs', c:'eb logs', w:'Check application and deployment logs', r:true},
+    {n:'Set environment variables', c:'eb setenv KEY=VALUE', w:'Inject config into app environment', r:false},
+  ]},
+  awsvpc: { title:'AWS VPC', icon:'🌐', provider:'aws', subtitle:'Private network for AWS resources', items:[
+    {n:'Create VPC', c:'aws ec2 create-vpc --cidr-block 10.0.0.0/16', w:'Define private IP space', r:true},
+    {n:'Create public subnet', c:'aws ec2 create-subnet --vpc-id VPC_ID --cidr-block 10.0.1.0/24 --availability-zone us-east-1a', w:'Public subnet for internet-facing resources', r:true},
+    {n:'Create private subnet', c:'aws ec2 create-subnet --vpc-id VPC_ID --cidr-block 10.0.2.0/24 --availability-zone us-east-1a', w:'Private subnet for databases, internal services', r:true},
+    {n:'Create Internet Gateway', c:'aws ec2 create-internet-gateway && aws ec2 attach-internet-gateway --vpc-id VPC_ID --internet-gateway-id IGW_ID', w:'Enables internet access from public subnet', r:true},
+    {n:'Create route table for public subnet', c:'aws ec2 create-route-table --vpc-id VPC_ID && aws ec2 create-route --route-table-id RT_ID --destination-cidr-block 0.0.0.0/0 --gateway-id IGW_ID', w:'Route public traffic to internet gateway', r:true},
+    {n:'Associate route table with subnet', c:'aws ec2 associate-route-table --subnet-id SUBNET_ID --route-table-id RT_ID', w:'Apply routing to subnet', r:true},
+    {n:'Create NAT Gateway (private subnets)', c:'aws ec2 create-nat-gateway --subnet-id PUBLIC_SUBNET_ID --allocation-id EIP_ALLOC_ID', w:'Private resources can reach internet', r:false},
+  ]},
+  s3: { title:'Amazon S3', icon:'🗂️', provider:'aws', subtitle:'Object storage for files & assets', items:[
+    {n:'Create bucket', c:'aws s3 mb s3://my-unique-bucket-name --region us-east-1', w:'Create S3 bucket', r:true},
+    {n:'Upload files', c:'aws s3 cp ./file.txt s3://my-bucket/', w:'Upload single file', r:true},
+    {n:'Sync directory', c:'aws s3 sync ./dist s3://my-bucket/ --delete', w:'Sync build output to S3', r:true},
+    {n:'Enable static website', c:'aws s3 website s3://my-bucket/ --index-document index.html --error-document error.html', w:'Host static site from S3', r:false},
+    {n:'Set bucket policy (public)', c:'aws s3api put-bucket-policy --bucket my-bucket --policy file://policy.json', w:'Control public/private access', r:false},
+    {n:'Enable versioning', c:'aws s3api put-bucket-versioning --bucket my-bucket --versioning-configuration Status=Enabled', w:'Keep history of object versions', r:false},
+  ]},
+  rds: { title:'Amazon RDS', icon:'🗄️', provider:'aws', subtitle:'Managed relational database', items:[
+    {n:'Create DB subnet group', c:'aws rds create-db-subnet-group --db-subnet-group-name my-subnet-group --db-subnet-group-description "My DB subnets" --subnet-ids SUBNET1 SUBNET2', w:'RDS must be in specific subnets', r:true},
+    {n:'Create RDS instance', c:'aws rds create-db-instance --db-instance-identifier mydb --db-instance-class db.t3.micro --engine postgres --master-username admin --master-user-password PASS --db-subnet-group-name my-subnet-group --vpc-security-group-ids SG_ID', w:'Provision managed PostgreSQL', r:true},
+    {n:'Wait for DB available', c:'aws rds wait db-instance-available --db-instance-identifier mydb', w:'Wait until DB is ready', r:true},
+    {n:'Get DB endpoint', c:'aws rds describe-db-instances --db-instance-identifier mydb --query "DBInstances[0].Endpoint.Address"', w:'Connection hostname for app', r:true},
+    {n:'Store credentials in Secrets Manager', c:'aws secretsmanager create-secret --name DB_CREDS --secret-string \'{"user":"admin","pass":"PASS"}\'', w:'Never hardcode DB credentials', r:true},
+    {n:'Enable automated backups', c:'--backup-retention-period 7', w:'Keep 7 days of automated snapshots', r:false},
+  ]},
+  awsiam: { title:'AWS IAM', icon:'🛡️', provider:'aws', subtitle:'Identity & access management', items:[
+    {n:'Create IAM role for service', c:'aws iam create-role --role-name my-service-role --assume-role-policy-document file://trust-policy.json', w:'Services use roles, not users', r:true},
+    {n:'Attach least-privilege policy', c:'aws iam attach-role-policy --role-name my-service-role --policy-arn arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess', w:'Grant only what the service needs', r:true},
+    {n:'Create instance profile (EC2)', c:'aws iam create-instance-profile --instance-profile-name my-profile && aws iam add-role-to-instance-profile --instance-profile-name my-profile --role-name my-service-role', w:'Attach role to EC2 instance', r:false},
+    {n:'Audit IAM users/roles', c:'aws iam generate-credential-report && aws iam get-credential-report', w:'Review access and rotate old keys', r:true},
+    {n:'Enable MFA for admin users', c:'aws iam enable-mfa-device --user-name admin --serial-number arn:... --authentication-code1 ... --authentication-code2 ...', w:'Critical: protect admin accounts with MFA', r:true},
+  ]},
+  awssecrets: { title:'AWS Secrets Manager', icon:'🔐', provider:'aws', subtitle:'Secure secret storage', items:[
+    {n:'Create secret', c:'aws secretsmanager create-secret --name my-secret --secret-string "{"user":"admin","pass":"mypass"}"', w:'Store sensitive credentials', r:true},
+    {n:'Get secret value', c:'aws secretsmanager get-secret-value --secret-id my-secret --query SecretString --output text', w:'Retrieve secret for app use', r:true},
+    {n:'Grant Lambda/ECS access to secret', c:'aws iam attach-role-policy --role-name my-role --policy-arn arn:aws:iam::aws:policy/SecretsManagerReadWrite', w:'Allow service to read secrets', r:true},
+    {n:'Enable automatic rotation', c:'aws secretsmanager rotate-secret --secret-id my-secret --rotation-lambda-arn LAMBDA_ARN', w:'Auto-rotate DB passwords on schedule', r:false},
+  ]},
+  ecr: { title:'Amazon ECR', icon:'📦', provider:'aws', subtitle:'Private Docker image registry', items:[
+    {n:'Create ECR repository', c:'aws ecr create-repository --repository-name myapp --region us-east-1', w:'Private container registry', r:true},
+    {n:'Auth Docker to ECR', c:'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ACCOUNT.dkr.ecr.REGION.amazonaws.com', w:'Login expires after 12h — refresh in CI/CD', r:true},
+    {n:'Build image', c:'docker build -t myapp:v1 .', w:'Build Docker image locally', r:true},
+    {n:'Tag for ECR', c:'docker tag myapp:v1 ACCOUNT.dkr.ecr.REGION.amazonaws.com/myapp:v1', w:'Use full ECR registry path', r:true},
+    {n:'Push to ECR', c:'docker push ACCOUNT.dkr.ecr.REGION.amazonaws.com/myapp:v1', w:'Upload image to private registry', r:true},
+    {n:'Enable image scanning', c:'aws ecr put-image-scanning-configuration --repository-name myapp --image-scanning-configuration scanOnPush=true', w:'Auto-scan images for CVE vulnerabilities', r:false},
+  ]},
+  codepipeline: { title:'CodePipeline (CI/CD)', icon:'🔨', provider:'aws', subtitle:'Full CI/CD automation', items:[
+    {n:'Create CodeBuild project', c:'aws codebuild create-project --name my-build --source type=GITHUB,location=https://github.com/... --artifacts type=NO_ARTIFACTS --environment type=LINUX_CONTAINER,image=aws/codebuild/standard:5.0', w:'Builds and tests your code', r:true},
+    {n:'Create pipeline', c:'aws codepipeline create-pipeline --pipeline file://pipeline.json', w:'Orchestrates Source → Build → Deploy', r:true},
+    {n:'Add GitHub webhook', c:'aws codepipeline put-webhook --webhook file://webhook.json', w:'Trigger pipeline on git push', r:true},
+    {n:'View pipeline status', c:'aws codepipeline get-pipeline-state --name my-pipeline', w:'Check which stage pipeline is in', r:true},
+  ]},
+  cloudwatch: { title:'CloudWatch', icon:'📊', provider:'aws', subtitle:'Logs, metrics, alarms', items:[
+    {n:'View recent logs', c:'aws logs tail /aws/lambda/myFunc --follow', w:'Stream live logs from service', r:true},
+    {n:'Create metric alarm', c:'aws cloudwatch put-metric-alarm --alarm-name high-cpu --metric-name CPUUtilization --namespace AWS/EC2 --threshold 80 --comparison-operator GreaterThanThreshold --evaluation-periods 2 --alarm-actions SNS_ARN', w:'Alert when CPU > 80%', r:true},
+    {n:'Create log group', c:'aws logs create-log-group --log-group-name /myapp/logs', w:'Centralize app logs', r:false},
+    {n:'Create dashboard', c:'aws cloudwatch put-dashboard --dashboard-name MyApp --dashboard-body file://dashboard.json', w:'Visualize metrics', r:false},
+  ]},
+
+  // ─────── AZURE ───────
+  preflight_az: { title:'Azure Pre-Flight', icon:'🛫', provider:'az', subtitle:'Required before any Azure deployment', items:[
+    {n:'Install Azure CLI', c:'curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash', w:'Core tool for all Azure ops', r:true},
+    {n:'Login', c:'az login', w:'Authenticate with Azure AD', r:true},
+    {n:'List subscriptions', c:'az account list --output table', w:'See all available subscriptions', r:true},
+    {n:'Set active subscription', c:'az account set --subscription SUBSCRIPTION_ID', w:'Target the right subscription', r:true},
+    {n:'Create Resource Group', c:'az group create --name my-rg --location eastus', w:'Logical container for all resources', r:true},
+    {n:'Verify active account', c:'az account show', w:'Confirm subscription and tenant', r:true},
+  ]},
+  azvm: { title:'Azure Virtual Machine', icon:'🖥️', provider:'az', subtitle:'Deploy app to a VM', items:[
+    {n:'Create VM', c:'az vm create --resource-group my-rg --name my-vm --image UbuntuLTS --size Standard_B2s --admin-username azureuser --generate-ssh-keys', w:'Provision VM with auto SSH keys', r:true},
+    {n:'Open port 80', c:'az vm open-port --port 80 --resource-group my-rg --name my-vm', w:'Open inbound port in NSG', r:true},
+    {n:'Get public IP', c:'az vm show -d -g my-rg -n my-vm --query publicIps -o tsv', w:'Get IP to connect to', r:true},
+    {n:'SSH into VM', c:'ssh azureuser@PUBLIC_IP', w:'Connect to VM terminal', r:true},
+    {n:'Install runtime & deploy', c:'sudo apt update && sudo apt install -y nodejs npm', w:'Install language runtime', r:true},
+    {n:'Configure systemd service', c:'sudo nano /etc/systemd/system/myapp.service', w:'Run app persistently', r:false},
+    {n:'Start & enable service', c:'sudo systemctl start myapp && sudo systemctl enable myapp', w:'Start app and auto-start', r:true},
+    {n:'Verify app', c:'curl http://PUBLIC_IP:PORT', w:'Confirm app responds', r:true},
+  ]},
+  appsvc: { title:'App Service', icon:'🌐', provider:'az', subtitle:'PaaS web app deployment', items:[
+    {n:'Create App Service Plan', c:'az appservice plan create --name my-plan --resource-group my-rg --sku B1 --is-linux', w:'Defines compute tier (B1=basic, P1=premium)', r:true},
+    {n:'Create web app', c:'az webapp create --resource-group my-rg --plan my-plan --name my-app --runtime "NODE:18-lts"', w:'Create the web app', r:true},
+    {n:'Deploy from zip', c:'az webapp deploy --resource-group my-rg --name my-app --src-path ./app.zip', w:'Deploy code as zip package', r:true},
+    {n:'Set environment variables', c:'az webapp config appsettings set --name my-app -g my-rg --settings KEY=VALUE', w:'Inject config into app', r:false},
+    {n:'Enable logs', c:'az webapp log config --name my-app -g my-rg --application-logging filesystem --level information', w:'Capture app logs to filesystem', r:true},
+    {n:'Stream logs', c:'az webapp log tail --name my-app --resource-group my-rg', w:'Watch live log output', r:true},
+    {n:'Get app URL', c:'az webapp show --name my-app -g my-rg --query defaultHostName -o tsv', w:'Get public URL', r:true},
+  ]},
+  aks: { title:'AKS (Kubernetes)', icon:'☸️', provider:'az', subtitle:'Managed Kubernetes on Azure', items:[
+    {n:'Create AKS cluster', c:'az aks create --resource-group my-rg --name my-aks --node-count 3 --node-vm-size Standard_D2s_v3 --generate-ssh-keys', w:'Provision AKS cluster', r:true},
+    {n:'Create Azure Container Registry', c:'az acr create --resource-group my-rg --name myACR --sku Basic', w:'Private image registry for AKS', r:true},
+    {n:'Login to ACR', c:'az acr login --name myACR', w:'Auth Docker to ACR', r:true},
+    {n:'Build & push image', c:'docker tag myapp myACR.azurecr.io/myapp:v1 && docker push myACR.azurecr.io/myapp:v1', w:'Push image to ACR', r:true},
+    {n:'Attach ACR to AKS', c:'az aks update -n my-aks -g my-rg --attach-acr myACR', w:'Grant AKS permission to pull from ACR', r:true},
+    {n:'Get credentials', c:'az aks get-credentials --resource-group my-rg --name my-aks', w:'Configure kubectl for AKS', r:true},
+    {n:'Deploy workloads', c:'kubectl apply -f deployment.yaml', w:'Same K8s manifests as GKE/EKS', r:true},
+    {n:'Check pods', c:'kubectl get pods && kubectl get services', w:'Verify Running + get external IP', r:true},
+  ]},
+  azfn: { title:'Azure Functions', icon:'⚡', provider:'az', subtitle:'Serverless event-driven functions', items:[
+    {n:'Install Functions Core Tools', c:'npm install -g azure-functions-core-tools@4', w:'CLI for local function development', r:true},
+    {n:'Init function project', c:'func init my-func --worker-runtime node', w:'Scaffold function project', r:true},
+    {n:'Create new function', c:'func new --name myHttpFunc --template "HTTP trigger"', w:'Add HTTP trigger function', r:true},
+    {n:'Test locally', c:'func start', w:'Run function locally', r:true},
+    {n:'Create function app in Azure', c:'az functionapp create --resource-group my-rg --name my-func --consumption-plan-location eastus --runtime node --runtime-version 18 --functions-version 4 --storage-account STORAGE_NAME', w:'Provision serverless function app', r:true},
+    {n:'Deploy to Azure', c:'func azure functionapp publish my-func', w:'Deploy function code', r:true},
+    {n:'Stream logs', c:'az webapp log tail --name my-func --resource-group my-rg', w:'Watch function execution logs', r:true},
+  ]},
+  contapps: { title:'Container Apps', icon:'🚀', provider:'az', subtitle:'Modern microservices platform (like Cloud Run)', items:[
+    {n:'Enable Container Apps extension', c:'az extension add --name containerapp && az provider register --namespace Microsoft.App', w:'Activate Container Apps support', r:true},
+    {n:'Create environment', c:'az containerapp env create --name my-env --resource-group my-rg --location eastus', w:'Shared environment for container apps', r:true},
+    {n:'Build & push image to ACR', c:'az acr build --registry myACR --image myapp:v1 .', w:'Cloud build and push to ACR', r:true},
+    {n:'Create Container App', c:'az containerapp create --name my-app --resource-group my-rg --environment my-env --image myACR.azurecr.io/myapp:v1 --target-port 80 --ingress external', w:'Deploy container as serverless app', r:true},
+    {n:'Get app URL', c:'az containerapp show --name my-app -g my-rg --query properties.configuration.ingress.fqdn -o tsv', w:'Get public HTTPS URL', r:true},
+    {n:'Scale config', c:'az containerapp update --name my-app -g my-rg --min-replicas 0 --max-replicas 10', w:'Configure auto-scaling (0 = scale to zero)', r:false},
+  ]},
+  keyvault: { title:'Azure Key Vault', icon:'🔐', provider:'az', subtitle:'Secrets, keys & certificates', items:[
+    {n:'Create Key Vault', c:'az keyvault create --name my-kv --resource-group my-rg --location eastus', w:'Provision Key Vault instance', r:true},
+    {n:'Create secret', c:'az keyvault secret set --vault-name my-kv --name DB-PASS --value "mypassword"', w:'Store sensitive credential', r:true},
+    {n:'Grant app access via Managed Identity', c:'az keyvault set-policy --name my-kv --object-id IDENTITY_OBJECT_ID --secret-permissions get list', w:'App reads secrets without credentials in code', r:true},
+    {n:'Enable Managed Identity on app', c:'az webapp identity assign --name my-app --resource-group my-rg', w:'App gets system identity for Key Vault access', r:true},
+    {n:'Reference secret in App Service', c:'@Microsoft.KeyVault(SecretUri=https://my-kv.vault.azure.net/secrets/DB-PASS/)', w:'Auto-resolved secret reference in config', r:false},
+  ]},
+  azmonitor: { title:'Azure Monitor', icon:'📊', provider:'az', subtitle:'Logs, metrics & alerts', items:[
+    {n:'Create Log Analytics workspace', c:'az monitor log-analytics workspace create --resource-group my-rg --workspace-name my-workspace', w:'Central place for all log data', r:true},
+    {n:'Enable diagnostic settings', c:'az monitor diagnostic-settings create --name my-diag --resource RESOURCE_ID --workspace LOG_WORKSPACE_ID --logs \'[{"category":"AppServiceHTTPLogs","enabled":true}]\'', w:'Send resource logs to Log Analytics', r:true},
+    {n:'Create metric alert', c:'az monitor metrics alert create --name high-cpu --resource RESOURCE_ID --condition "avg Percentage CPU > 80" --action ACTION_GROUP_ID', w:'Alert when CPU > 80%', r:true},
+    {n:'Create action group (email)', c:'az monitor action-group create --name my-ag --resource-group my-rg --short-name myag --email-receiver name=me address=me@example.com', w:'Who to notify when alert fires', r:true},
+    {n:'Query logs (KQL)', c:'az monitor log-analytics query --workspace LOG_WS_ID --analytics-query "AppRequests | where ResultCode != 200 | limit 50"', w:'Search logs using Kusto Query Language', r:false},
+  ]},
+
+  // ─────── CLOUDFLARE ───────
+  preflight_cf: { title:'Cloudflare Pre-Flight', icon:'🛫', provider:'cf', subtitle:'Required before any Cloudflare deployment', items:[
+    {n:'Install Wrangler CLI', c:'npm install -g wrangler', w:'Wrangler = CLI for all CF deployments', r:true},
+    {n:'Login to Cloudflare', c:'wrangler login', w:'Opens browser to authenticate', r:true},
+    {n:'Verify identity', c:'wrangler whoami', w:'Confirm authenticated account', r:true},
+    {n:'Add domain to Cloudflare', c:'Cloudflare Dashboard → Add a Site', w:'Domain must be in CF to use services', r:true},
+    {n:'Update nameservers at registrar', c:'Copy CF nameservers from Dashboard → DNS → Nameservers', w:'Point domain DNS to Cloudflare', r:true},
+    {n:'Verify zone is active', c:'Dashboard → Zone should show Active status', w:'DNS propagation can take up to 48h', r:true},
+  ]},
+  workers: { title:'Cloudflare Workers', icon:'⚡', provider:'cf', subtitle:'Serverless code at the edge', items:[
+    {n:'Init Worker project', c:'wrangler init my-worker', w:'Scaffold new Worker with wrangler.toml', r:true},
+    {n:'Write Worker code', c:'export default { async fetch(request, env) { return new Response("Hello!"); } }', w:'Workers use Web API standard — fetch, Response, etc.', r:true},
+    {n:'Test locally', c:'wrangler dev', w:'Run Worker locally with live reload', r:true},
+    {n:'Deploy to edge', c:'wrangler deploy', w:'Deploy to 200+ Cloudflare edge locations', r:true},
+    {n:'Set route pattern', c:'wrangler deploy --route "mydomain.com/api/*"', w:'Attach Worker to specific URL path', r:false},
+    {n:'Add secrets', c:'wrangler secret put API_KEY', w:'Securely inject secrets — never in code', r:false},
+    {n:'Stream logs', c:'wrangler tail', w:'Live logs from Worker executions', r:true},
+  ]},
+  pages: { title:'Cloudflare Pages', icon:'🌐', provider:'cf', subtitle:'Static site and frontend hosting', items:[
+    {n:'Build your static site', c:'npm run build (creates dist/ or build/ folder)', w:'Pages deploys the output of your build step', r:true},
+    {n:'Deploy from CLI', c:'wrangler pages deploy ./dist --project-name my-site', w:'Upload static files to Pages', r:true},
+    {n:'OR connect GitHub repo', c:'Dashboard → Pages → Create project → Connect GitHub', w:'Every git push auto-deploys — CI/CD built in', r:false},
+    {n:'Configure build settings', c:'Build command: npm run build | Output: dist', w:'Set in Dashboard → Pages → Settings → Builds', r:true},
+    {n:'Add custom domain', c:'Dashboard → Pages → Custom Domains → Add domain', w:'Map your domain to the Pages site', r:true},
+    {n:'Set environment variables', c:'Dashboard → Pages → Settings → Environment Variables', w:'Available during build and runtime', r:false},
+    {n:'Preview deployments', c:'Every PR automatically gets a unique preview URL', w:'Test changes before merging to production', r:false},
+  ]},
+  tunnel: { title:'Cloudflare Tunnel', icon:'🔌', provider:'cf', subtitle:'Expose private services without firewall changes', items:[
+    {n:'Install cloudflared', c:'curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared && chmod +x cloudflared && sudo mv cloudflared /usr/local/bin/', w:'The tunnel agent installed on your server', r:true},
+    {n:'Login cloudflared', c:'cloudflared tunnel login', w:'Authenticate to your Cloudflare account', r:true},
+    {n:'Create tunnel', c:'cloudflared tunnel create my-tunnel', w:'Creates a named tunnel with credentials file', r:true},
+    {n:'Create DNS record for tunnel', c:'cloudflared tunnel route dns my-tunnel myservice.mydomain.com', w:'Map subdomain to this tunnel', r:true},
+    {n:'Create config file', c:'echo "url: http://localhost:3000\ntunnel: my-tunnel\ncredentials-file: ~/.cloudflared/TUNNEL_ID.json" > config.yml', w:'Tell tunnel where your local service is', r:true},
+    {n:'Run tunnel', c:'cloudflared tunnel run my-tunnel', w:'Start the tunnel — service now accessible publicly', r:true},
+    {n:'Run as systemd service', c:'sudo cloudflared service install && sudo systemctl start cloudflared', w:'Persistent tunnel — survives reboots', r:false},
+  ]},
+  cfdns: { title:'Cloudflare DNS', icon:'🌍', provider:'cf', subtitle:'Manage DNS records for your domain', items:[
+    {n:'Add A record (root domain)', c:'Dashboard → DNS → Add Record → Type: A → Name: @ → IPv4: YOUR_IP', w:'Map root domain to server IP', r:true},
+    {n:'Add CNAME (www)', c:'Type: CNAME → Name: www → Target: @', w:'www.domain.com → domain.com', r:true},
+    {n:'Enable proxy (orange cloud)', c:'Toggle proxy ON for DNS records that go through Cloudflare', w:'Activates CDN, DDoS, WAF, and hides origin IP', r:true},
+    {n:'Add MX record (email)', c:'Type: MX → Name: @ → Mail server: mail.provider.com → Priority: 10', w:'Route email for your domain', r:false},
+    {n:'Verify DNS propagation', c:'dig mydomain.com @1.1.1.1', w:'Cloudflare uses 1.1.1.1 as its DNS resolver', r:true},
+  ]},
+  cfcdn: { title:'CDN & Cache Rules', icon:'⚡', provider:'cf', subtitle:'Edge caching for performance', items:[
+    {n:'Enable proxy on DNS records', c:'Toggle orange cloud ON — CDN is automatically active', w:'Cloudflare CDN activates when proxy is on', r:true},
+    {n:'Create cache rule for static assets', c:'Dashboard → Caching → Cache Rules → Create Rule: URL path contains /static/* → Cache everything', w:'Explicitly cache static files at edge', r:true},
+    {n:'Set browser cache TTL', c:'Dashboard → Caching → Configuration → Browser Cache TTL', w:'How long browsers cache Cloudflare-served content', r:false},
+    {n:'Purge cache after deploy', c:'Dashboard → Caching → Purge Everything OR Custom Purge by URL', w:'Force edge to serve fresh content after deployment', r:true},
+    {n:'Check cache hit ratio', c:'Dashboard → Analytics & Logs → Web Analytics → Caching', w:'Monitor how much traffic is served from cache', r:false},
+  ]},
+  cfwaf: { title:'WAF + Security', icon:'🛡️', provider:'cf', subtitle:'Protect against attacks', items:[
+    {n:'Enable managed WAF rules', c:'Dashboard → Security → WAF → Managed Rules → Deploy Cloudflare Managed Ruleset', w:'Block OWASP Top 10, bots, scanners', r:true},
+    {n:'Create custom firewall rule', c:'Dashboard → Security → WAF → Custom Rules → Create Rule: (ip.src in {MALICIOUS_IP}) → Action: Block', w:'Block specific IPs, countries, or patterns', r:false},
+    {n:'Enable rate limiting', c:'Dashboard → Security → WAF → Rate Limiting Rules → Create: N requests per 10s → Block', w:'Prevent brute force and DDoS', r:true},
+    {n:'Enable Bot Fight Mode', c:'Dashboard → Security → Bots → Bot Fight Mode → On', w:'Automatically challenge/block malicious bots', r:true},
+    {n:'Review security events', c:'Dashboard → Security → Events', w:'Inspect what WAF is blocking', r:true},
+    {n:'Block by country (geo)', c:'Custom Rule: (ip.geoip.country eq "RU") → Block', w:'Block traffic from specific countries', r:false},
+  ]},
+  r2: { title:'Cloudflare R2', icon:'🗂️', provider:'cf', subtitle:'S3-compatible storage, no egress fees', items:[
+    {n:'Create R2 bucket', c:'wrangler r2 bucket create my-bucket', w:'Create object storage bucket', r:true},
+    {n:'Upload file from CLI', c:'wrangler r2 object put my-bucket/hello.txt --file ./hello.txt', w:'Upload file to R2', r:true},
+    {n:'Enable public access', c:'Dashboard → R2 → Bucket → Settings → Public Access → Enable', w:'Get a public r2.dev URL for the bucket', r:false},
+    {n:'Use S3 SDK with R2', c:'const s3 = new S3Client({ endpoint: "https://ACCOUNT_ID.r2.cloudflarestorage.com", region: "auto" })', w:'R2 is S3-compatible — use existing S3 code', r:false},
+    {n:'Bind R2 to Worker', c:'In wrangler.toml: [[r2_buckets]]\nbinding = "MY_BUCKET"\nbucket_name = "my-bucket"', w:'Access R2 from Worker code via env.MY_BUCKET', r:true},
+  ]},
+  d1: { title:'Cloudflare D1', icon:'🗄️', provider:'cf', subtitle:'Serverless SQLite at the edge', items:[
+    {n:'Create D1 database', c:'wrangler d1 create my-database', w:'Provision serverless SQLite DB', r:true},
+    {n:'Run SQL migration', c:'wrangler d1 execute my-database --command "CREATE TABLE users (id INTEGER PRIMARY KEY, name TEXT)"', w:'Create tables and schema', r:true},
+    {n:'Bind D1 to Worker', c:'In wrangler.toml:\n[[d1_databases]]\nbinding = "DB"\ndatabase_id = "DATABASE_ID"', w:'Access D1 from Worker code', r:true},
+    {n:'Query from Worker', c:'const { results } = await env.DB.prepare("SELECT * FROM users WHERE id = ?").bind(userId).all()', w:'Read data in Worker request handler', r:true},
+    {n:'Insert data', c:'await env.DB.prepare("INSERT INTO users (name) VALUES (?)").bind("Alice").run()', w:'Write data to D1', r:true},
+  ]},
+  cfkv: { title:'Workers KV', icon:'📦', provider:'cf', subtitle:'Global key-value store for Workers', items:[
+    {n:'Create KV namespace', c:'wrangler kv namespace create MY_KV', w:'Create a KV store', r:true},
+    {n:'Bind to Worker in wrangler.toml', c:'[[kv_namespaces]]\nbinding = "MY_KV"\nid = "NAMESPACE_ID"', w:'Make KV accessible in Worker code', r:true},
+    {n:'Write a key-value pair', c:'wrangler kv key put --namespace-id NAMESPACE_ID "my-key" "my-value"', w:'Set a value in KV from CLI', r:true},
+    {n:'Read from Worker', c:'const value = await env.MY_KV.get("my-key")', w:'Read cached value in Worker', r:true},
+    {n:'Write from Worker', c:'await env.MY_KV.put("key", "value", {expirationTtl: 3600})', w:'Write with optional TTL expiry', r:true},
+  ]},
+
+};
+
+// ══════════════════════════════════════════
+// GENERATE CHECKLIST
+// ══════════════════════════════════════════
+function generateChecklist() {
+  if (!selectedService) { alert('Please select a deployment target first!'); return; }
+
+  const area = document.getElementById('checklist-area');
+  const blocks = document.getElementById('checklist-blocks');
+  area.classList.add('visible');
+  blocks.innerHTML = '';
+
+  const preflightKey = 'preflight_' + currentCloud;
+  const sections = [preflightKey, selectedService, ...selectedExtras].filter(k => CHECKLISTS[k]);
+
+  sections.forEach((key, idx) => {
+    const data = CHECKLISTS[key];
+    const el = buildBlock(key, data, idx);
+    blocks.appendChild(el);
+  });
+
+  updateOverall();
+  area.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function buildBlock(key, data, idx) {
+  const div = document.createElement('div');
+  div.className = 'checklist-block';
+  div.id = 'block-' + key;
+  div.style.animationDelay = (idx * 0.06) + 's';
+
+  const cloud = data.provider || currentCloud;
+  const cmdClass = cloud !== 'gcp' ? ` class="cl-item-cmd ${cloud}"` : ' class="cl-item-cmd"';
+
+  div.innerHTML = `
+    <div class="cl-header">
+      <div class="cl-header-left">
+        <span class="cl-icon">${data.icon}</span>
+        <div>
+          <div class="cl-title">${data.title} <span class="provider-badge ${cloud}">${cloud.toUpperCase()}</span></div>
+          <div class="cl-subtitle">${data.subtitle}</div>
+        </div>
+      </div>
+      <div class="cl-progress-wrap">
+        <div class="cl-progress-bar"><div class="cl-progress-fill" id="fill-${key}"></div></div>
+        <div class="cl-progress-text" id="prog-${key}">0/${data.items.length}</div>
+      </div>
+    </div>
+    <div class="cl-items" id="items-${key}">
+      ${data.items.map((item, i) => `
+        <div class="cl-item" id="item-${key}-${i}" onclick="toggleItem('${key}',${i})">
+          <div class="cl-checkbox"></div>
+          <div class="cl-item-body">
+            <div class="cl-item-name">${item.n}</div>
+            <span${cmdClass}>${item.c}</span>
+            <div class="cl-item-why">${item.w}</div>
+          </div>
+          <span class="cl-item-tag ${item.r?'req':'opt'}">${item.r?'Required':'Optional'}</span>
+        </div>
+      `).join('')}
+    </div>`;
+  return div;
+}
+
+function toggleItem(key, idx) {
+  document.getElementById(`item-${key}-${idx}`).classList.toggle('done');
+  updateBlockProgress(key);
+  updateOverall();
+}
+
+function updateBlockProgress(key) {
+  const data = CHECKLISTS[key]; if(!data) return;
+  const done = document.querySelectorAll(`#items-${key} .cl-item.done`).length;
+  const total = data.items.length;
+  const pct = Math.round(done/total*100);
+  const fill = document.getElementById(`fill-${key}`);
+  const prog = document.getElementById(`prog-${key}`);
+  if(fill) fill.style.width = pct+'%';
+  if(prog) prog.textContent = `${done}/${total}`;
+}
+
+function updateOverall() {
+  const all  = document.querySelectorAll('#checklist-blocks .cl-item').length;
+  const done = document.querySelectorAll('#checklist-blocks .cl-item.done').length;
+  const pct  = all===0 ? 0 : Math.round(done/all*100);
+  document.getElementById('overall-pct').textContent   = pct+'%';
+  document.getElementById('overall-count').textContent = `${done} / ${all} steps`;
+  document.getElementById('overall-fill').style.width  = pct+'%';
+}
+
+function resetChecklist() {
+  document.querySelectorAll('#checklist-blocks .cl-item').forEach(el => el.classList.remove('done'));
+  const sections = ['preflight_'+currentCloud, selectedService, ...selectedExtras];
+  sections.forEach(k => updateBlockProgress(k));
+  updateOverall();
+}
+</script>
+</body>
+</html>
